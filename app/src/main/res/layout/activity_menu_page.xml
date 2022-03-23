@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MenuPage">
+    tools:context=".Menu">
 
     <LinearLayout
         android:layout_width="412dp"
         android:layout_height="250dp"
         android:layout_marginTop="24dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/button21"
+        app:layout_constraintBottom_toTopOf="@+id/settingsButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -27,10 +27,11 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/button16"
+                android:id="@+id/plannerButton"
                 android:layout_width="180dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:onClick="plannerClick"
                 android:text="Planner" />
 
             <Space
@@ -39,10 +40,11 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/button19"
+                android:id="@+id/toDoButton"
                 android:layout_width="180dp"
                 android:layout_height="150dp"
                 android:layout_weight="1"
+                android:onClick="toDoClick"
                 android:text="To-Do" />
 
             <Space
@@ -63,10 +65,11 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/button20"
+                android:id="@+id/rewardsButton"
                 android:layout_width="380dp"
                 android:layout_height="90dp"
                 android:layout_weight="1"
+                android:onClick="rewardsClick"
                 android:text="Rewards" />
 
             <Space
@@ -78,10 +81,11 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button21"
+        android:id="@+id/settingsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
+        android:onClick="settingsClick"
         android:text="Settings"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
