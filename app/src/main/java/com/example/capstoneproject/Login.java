@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 public class Login extends AppCompatActivity {
 
     @Override
@@ -17,6 +20,20 @@ public class Login extends AppCompatActivity {
     public void loginClick (View view){
         Intent intent = new Intent(this, Menu.class);
         startActivity(intent);
+
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try  {
+                    DatabaseManagement.establishConnection();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
     }
 
     public void forgotPasswordClick (View view){
