@@ -2,7 +2,12 @@ package com.example.capstoneproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -39,40 +44,23 @@ public class Login extends AppCompatActivity {
         String username = userUser.getText().toString().toLowerCase().trim();
         String password = userPass.getText().toString().trim();
 
-        new AccountLogin(this).execute();
+        UserLogin user = new UserLogin();
+        user.username = username;
+        user.password = password;
 
-        /*
-        if (TextUtils.isEmpty(username)){           // didn't enter username
-
+        if (username.isEmpty()){
+            popupMessage("Please enter your username", this);
         }
-        else if (TextUtils.isEmpty(password)){      // didn't enter password
-
+        else if (password.isEmpty()){
+            popupMessage("Please enter your password", this);
         }
-        else{                                       // entered both
-            UserLogin userLogin = new UserLogin();
-            userLogin.username = username;
-            userLogin.password = password;
-            ApiResponse response = ApiFunctions.login(this, userLogin);
+        else{
+            new AccountLogin(this, this, view, user).execute();
 
-            if (response == null){
-                Log.e("RESPONSE IS NULL", "text");
-            }
-            else{
-                Log.e("RESPONSE CONTENT", response.text);
-                if (response.text != "Successful login"){       // issue with login
-
-                }
-                else{
-                    Intent intent = new Intent(this, Menu.class);
-                    startActivity(intent);
-                }
-            }
-
-
-
+            userPass.setText("");
+            userUser.setText("");
         }
 
-         */
     }
 
     public void loginResult(ApiResponse response){
@@ -88,68 +76,68 @@ public class Login extends AppCompatActivity {
         Intent intent = new Intent(this, CreateAccount.class);
         startActivity(intent);
     }
+
+    public static void popupMessage(String message, Context context){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setMessage(message);
+        alertDialogBuilder.setNegativeButton("ok", new DialogInterface.OnClickListener(){
+
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
 }
 
 class AccountLogin extends AsyncTask<String, Void, Void> {
     Context context;
+    Activity activity;
+    View view;
+    UserLogin user;
     ApiResponse apiResponse = null;
+    ProgressDialog progress;
+    Dialog dialog;
 
-    AccountLogin(Context ctx) {
+    AccountLogin(Context ctx, Activity act, View vw, UserLogin userLogin) {
         this.context = ctx;
+        this.activity = act;
+        this.view = vw;
+        this.user = userLogin;
     }
 
     @Override
     protected void onPreExecute(){
-        // loading bar
+        progress = new ProgressDialog(context);
+        progress.setMessage("Logging you in...");
+        progress.setIndeterminate(true);
+        progress.show();
     }
 
     protected Void doInBackground(String... urls){
-        String json = "{\"username\":\"admin\",\"password\":\"password123\"}";
-        ApiResponse response = null;
+        Gson gson = new Gson();
+        String json = gson.toJson(user);
 
-        try {
-            URL url = new URL(ApiManagement.baseUrl + "login");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-
-            OutputStream os = conn.getOutputStream();
-            os.write(json.getBytes("UTF-8"));
-            os.close();
-
-            InputStream in = new BufferedInputStream(conn.getInputStream());
-            String result = IOUtils.toString(in, "UTF-8");
-
-            Gson gson = new Gson();
-            response = gson.fromJson(result, ApiResponse.class);
-
-            Log.e("TESTING", result);
-
-            in.close();
-            conn.disconnect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        apiResponse = response;
-
-        Log.e("ENDOFBG", "made it here");
-        return null;
+        apiResponse = (ApiResponse)ApiManagement.PostWithReturn(json, new ApiResponse(), ApiResponse.class);
+        return  null;
     }
 
     @Override
     protected void onPostExecute(Void temp){
+        progress.hide();
+
         Log.e("results", apiResponse.text);
         if (apiResponse == null){
-            Log.e("RESPONSE IS NULL", "text");
+
         }
         else{
             Log.e("RESPONSE CONTENT", apiResponse.text);
-            if (apiResponse.text != apiResponse.text){       // issue with login        FIX THIS!!!!!!!!!!
-                Log.e("ifStatement", "text");
+            if (!apiResponse.text.equals("Successful login")){       // issue with login
+                Login.popupMessage(apiResponse.text, context);
             }
             else{
-                Log.e("elseStatement", "text");
-                //this.context = context.getApplicationContext();
                 Intent i = new Intent(context, Menu.class);
                 context.startActivity(i);
             }
