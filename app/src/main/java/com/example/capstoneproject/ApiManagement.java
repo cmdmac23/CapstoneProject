@@ -1,7 +1,13 @@
 package com.example.capstoneproject;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -32,90 +38,45 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ApiManagement {
-    public static RequestQueue requestQueue = null;
+    public static String username = "inFocus";
+    public static String password = "g=Q4c$A!*-Emf7rC";
+    public static String token = null;
     public static String baseUrl = "http://cmac23-001-site1.etempurl.com/api/database/";
     //public static String baseUrl = "http://162.242.2.65:55357/api/database/";
 
-    public static void setupQueue(Context context){
-        requestQueue = Volley.newRequestQueue(context);
-    }
+    public static String GetToken(){
+        if (token == null){
+            try {
+                URL url = new URL("http://cmac23-001-site1.etempurl.com/api/authenticate");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("username", username);
+                conn.setRequestProperty("password", password);
 
-    public static JSONObject requestJson(Context context, String endpoint, int method, JSONObject json){
-        if (requestQueue == null)
-            setupQueue(context);
+                InputStream in = new BufferedInputStream(conn.getInputStream());
+                String result = IOUtils.toString(in, "UTF-8");
 
-        RequestFuture<JSONObject> future = RequestFuture.newFuture();
+                Gson gson = new Gson();
+                Authortization auth = gson.fromJson(result, Authortization.class);
 
-        Log.e("API ENDPOINT", baseUrl + endpoint);
+                token = auth.token;
 
-        /*
-        JsonObjectRequest objectRequest = new JsonObjectRequest(
-                method,
-                baseUrl + endpoint,
-                json,
-                future,
-                future
-
-        );
-
-         */
-
-        JsonObjectRequest objectRequest = new JsonObjectRequest(
-                method,
-                baseUrl + endpoint,
-                json,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.e("NEW TEST", response.toString());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("NEW TEST", error.toString());
-                    }
-                }
-
-        );
-
-        /*{@Override
-        public Map<String, String> getHeaders() throws AuthFailureError {
-            Map<String, String> params = new HashMap<>();
-            params.put("Content-Type", "application/json");
-            params.put("Accept", "application/json");
-            return params;
-        }};
-        */
-
-        Log.e("objectRequest", objectRequest.getBodyContentType());
-        Log.e("objectRequest", objectRequest.getUrl());
-
-
-        objectRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        requestQueue.add(objectRequest);
-
-        try{
-            Log.e("IN TRY STATEMENT", "Future.get");
-            //return future.get(30, TimeUnit.SECONDS);
-        } catch (Exception e){
-            Log.e("API EXCEPTION", e.toString());
-            Log.e("API STACKTRACE", e.getMessage());
-            Log.e("API STACKTRACE", e.getLocalizedMessage());
+                in.close();
+                conn.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
-        return null;
+        return token;
     }
 
-    public static Object PostWithReturn(String json, Object object, Class cls){
+    public static Object PostWithReturn(String endpoint, String json, Object object, Class cls){
         try {
-            URL url = new URL(ApiManagement.baseUrl + "login");
+            URL url = new URL(ApiManagement.baseUrl + endpoint);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            conn.setRequestProperty("Authorization", "Bearer " + GetToken());
 
             OutputStream os = conn.getOutputStream();
             os.write(json.getBytes("UTF-8"));
@@ -139,3 +100,5 @@ public class ApiManagement {
     }
 
 }
+
+

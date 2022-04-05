@@ -1,5 +1,10 @@
 package com.example.capstoneproject;
 
+
+class Authortization{
+    public String token;
+}
+
 class ApiResponse {
     public String text;
     public int code;

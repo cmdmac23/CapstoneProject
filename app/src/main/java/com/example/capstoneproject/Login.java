@@ -99,7 +99,6 @@ class AccountLogin extends AsyncTask<String, Void, Void> {
     UserLogin user;
     ApiResponse apiResponse = null;
     ProgressDialog progress;
-    Dialog dialog;
 
     AccountLogin(Context ctx, Activity act, View vw, UserLogin userLogin) {
         this.context = ctx;
@@ -120,20 +119,17 @@ class AccountLogin extends AsyncTask<String, Void, Void> {
         Gson gson = new Gson();
         String json = gson.toJson(user);
 
-        apiResponse = (ApiResponse)ApiManagement.PostWithReturn(json, new ApiResponse(), ApiResponse.class);
+        apiResponse = (ApiResponse)ApiManagement.PostWithReturn("login", json, new ApiResponse(), ApiResponse.class);
         return  null;
     }
 
     @Override
     protected void onPostExecute(Void temp){
         progress.hide();
-
-        Log.e("results", apiResponse.text);
         if (apiResponse == null){
 
         }
         else{
-            Log.e("RESPONSE CONTENT", apiResponse.text);
             if (!apiResponse.text.equals("Successful login")){       // issue with login
                 Login.popupMessage(apiResponse.text, context);
             }
