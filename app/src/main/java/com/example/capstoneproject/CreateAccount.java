@@ -31,7 +31,16 @@ public class CreateAccount extends AppCompatActivity {
         EditText enteredPass = findViewById(R.id.createPassword);
         EditText enteredPass2 = findViewById(R.id.createPasswordVerify);
 
-        if (!enteredPass.getText().toString().equals(enteredPass2.getText().toString())){
+        if(enteredEmail.getText().toString().isEmpty())
+            popupMessage("Please enter an email address", this);
+        else if(enteredUser.getText().toString().isEmpty())
+            popupMessage("Please enter a username", this);
+        else if (enteredPass.getText().toString().isEmpty() || enteredPass2.getText().toString().isEmpty()){
+            popupMessage("Please enter a password", this);
+            enteredPass.setText("");
+            enteredPass2.setText("");
+        }
+        else if (!enteredPass.getText().toString().equals(enteredPass2.getText().toString())){
             popupMessage("The passwords you entered do not match", this);
             enteredPass.setText("");
             enteredPass2.setText("");
@@ -53,8 +62,6 @@ public class CreateAccount extends AppCompatActivity {
             enteredPass.setText("");
             enteredPass2.setText("");
         }
-
-
     }
 
     public static void popupMessage(String message, Context context){

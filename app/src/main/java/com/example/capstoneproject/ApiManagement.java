@@ -99,6 +99,27 @@ public class ApiManagement {
         return null;
     }
 
+    public static void PostNoReturn(String endpoint, String json){
+        try {
+            URL url = new URL(ApiManagement.baseUrl + endpoint);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            conn.setRequestProperty("Authorization", "Bearer " + GetToken());
+
+            OutputStream os = conn.getOutputStream();
+            os.write(json.getBytes("UTF-8"));
+            os.close();
+
+            new BufferedInputStream(conn.getInputStream());
+
+            conn.disconnect();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 
