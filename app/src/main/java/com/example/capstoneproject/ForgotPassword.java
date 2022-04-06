@@ -59,7 +59,6 @@ public class ForgotPassword extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         Intent i = new Intent(this, Login.class);
         startActivity(i);
-        finish();
         return true;
     }
 }
@@ -89,7 +88,6 @@ class ForgotPasswordAction extends AsyncTask<String, Void, Void> {
     protected Void doInBackground(String... urls){
         Gson gson = new Gson();
         String json = gson.toJson(user);
-        Log.e("JSON", json);
 
         ApiManagement.PostNoReturn("forgotpassword", json);
 
