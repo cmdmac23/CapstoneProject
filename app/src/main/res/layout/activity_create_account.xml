@@ -64,7 +64,7 @@
         android:id="@+id/createAccountButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="200dp"
+        android:layout_marginBottom="240dp"
         android:onClick="createAccountClick"
         android:text="Create Account"
         app:backgroundTint="@color/middle_green"

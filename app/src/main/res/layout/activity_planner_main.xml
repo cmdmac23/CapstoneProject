@@ -8,8 +8,8 @@
 
     <CalendarView
         android:id="@+id/calendarView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="390dp"
+        android:layout_height="318dp"
         android:layout_marginTop="16dp"
         android:focusedMonthDateColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"

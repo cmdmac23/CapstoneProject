@@ -26,6 +26,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Login extends AppCompatActivity {
+    public static int userid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,6 +136,7 @@ class AccountLogin extends AsyncTask<String, Void, Void> {
                 Login.popupMessage(apiResponse.text, context);
             }
             else{
+                Login.userid = apiResponse.userid;
                 Intent i = new Intent(context, Menu.class);
                 context.startActivity(i);
             }

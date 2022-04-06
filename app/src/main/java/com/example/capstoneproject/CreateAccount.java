@@ -1,5 +1,6 @@
 package com.example.capstoneproject;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import java.util.concurrent.TimeUnit;
@@ -23,6 +25,9 @@ public class CreateAccount extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     public void createAccountClick(View view){
@@ -89,6 +94,13 @@ public class CreateAccount extends AppCompatActivity {
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        Intent i = new Intent(this, Login.class);
+        startActivity(i);
+        finish();
+        return true;
     }
 }
 
