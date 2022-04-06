@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 
 public class ToDoMain extends AppCompatActivity {
-
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     public Context context = this;
@@ -27,6 +26,7 @@ public class ToDoMain extends AppCompatActivity {
         setContentView(R.layout.activity_to_do_main);
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("To-Do");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Popup side menu
@@ -41,6 +41,11 @@ public class ToDoMain extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Intent i;
                 switch (menuItem.getItemId()){
+                    case R.id.nav_home:
+                        i = new Intent(context, Menu.class);
+                        startActivity(i);
+                        finish();
+                        break;
                     case R.id.nav_planner:
                         i = new Intent(context, PlannerMain.class);
                         startActivity(i);
@@ -53,6 +58,11 @@ public class ToDoMain extends AppCompatActivity {
                         break;
                     case R.id.nav_rewards:
                         i = new Intent(context, RewardsMain.class);
+                        startActivity(i);
+                        finish();
+                        break;
+                    case R.id.nav_settings:
+                        i = new Intent(context, Settings.class);
                         startActivity(i);
                         finish();
                         break;

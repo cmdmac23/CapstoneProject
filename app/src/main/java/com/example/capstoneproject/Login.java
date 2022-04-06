@@ -139,6 +139,7 @@ class AccountLogin extends AsyncTask<String, Void, Void> {
                 Login.userid = apiResponse.userid;
                 Intent i = new Intent(context, Menu.class);
                 context.startActivity(i);
+                activity.finish();
             }
         }
     }

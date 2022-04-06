@@ -26,6 +26,7 @@ public class Menu extends AppCompatActivity {
         setContentView(R.layout.activity_menu_page);
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Home");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Popup side menu
@@ -40,6 +41,10 @@ public class Menu extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Intent i;
                 switch (menuItem.getItemId()){
+                    case R.id.nav_home:
+                        i = new Intent(context, Menu.class);
+                        startActivity(i);
+                        break;
                     case R.id.nav_planner:
                         i = new Intent(context, PlannerMain.class);
                         startActivity(i);
@@ -50,6 +55,10 @@ public class Menu extends AppCompatActivity {
                         break;
                     case R.id.nav_rewards:
                         i = new Intent(context, RewardsMain.class);
+                        startActivity(i);
+                        break;
+                    case R.id.nav_settings:
+                        i = new Intent(context, Settings.class);
                         startActivity(i);
                         break;
                 }

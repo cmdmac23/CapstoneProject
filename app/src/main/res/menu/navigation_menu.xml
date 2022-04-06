@@ -2,17 +2,34 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="HardcodedText">
+    <group
+        android:id="@+id/nav_topsection">
+        <!--android:checkableBehavior="single"-->
+        <item
+            android:id="@+id/nav_home"
+            android:title="Home" />
+    </group>
+    <group
+        android:id="@+id/nav_middlesection">
+        <!--android:checkableBehavior="single"-->
+        <item
+            android:id="@+id/nav_planner"
+            android:title="Planner" />
 
-    <item
-        android:id="@+id/nav_planner"
-        android:title="Planner" />
+        <item
+            android:id="@+id/nav_todo"
+            android:title="To-Do Lists" />
 
-    <item
-        android:id="@+id/nav_todo"
-        android:title="To-Do Lists" />
-
-    <item
-        android:id="@+id/nav_rewards"
-        android:title="Rewards" />
+        <item
+            android:id="@+id/nav_rewards"
+            android:title="Rewards" />
+    </group>
+    <group
+        android:id="@+id/nav_bottomsection">
+        <!--android:checkableBehavior="single"-->
+        <item
+            android:id="@+id/nav_settings"
+            android:title="Settings" />
+    </group>
 
 </menu>
