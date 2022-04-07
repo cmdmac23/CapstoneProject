@@ -8,6 +8,16 @@
     android:background="@color/lightest_green"
     tools:context=".Login">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="298dp"
+        android:layout_height="183dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/logo_white" />
+
     <EditText
         android:id="@+id/loginPassword"
         android:layout_width="wrap_content"
@@ -27,17 +37,16 @@
         android:id="@+id/loginUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="200dp"
+        android:layout_marginTop="-40dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="Username"
         android:inputType="text"
         android:textColor="@color/darkest_green"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <Button
         android:id="@+id/login_button"
@@ -67,7 +76,8 @@
         android:id="@+id/create_account_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="170dp"
+        android:layout_marginBottom="16dp"
         android:onClick="createAccountClick"
         android:text="Create Account"
         app:backgroundTint="@color/middle_green"

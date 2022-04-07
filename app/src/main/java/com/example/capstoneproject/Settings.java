@@ -25,7 +25,7 @@ public class Settings extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("To-Do");
+        actionBar.setTitle("Settings");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Popup side menu
