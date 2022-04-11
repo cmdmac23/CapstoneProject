@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CapstoneProject"
         android:usesCleartextTraffic="true">
-        <activity android:name=".CreatePlannerEvent"></activity>
+        <activity android:name=".CreatePlanner"></activity>
         <activity android:name=".Settings" />
         <activity android:name=".RewardsMain" />
         <activity android:name=".ToDoMain" />

@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -70,6 +71,11 @@ public class PlannerMain extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    public void CreateClick (View view){
+        Intent intent = new Intent(this, CreatePlanner.class);
+        startActivity(intent);
     }
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
