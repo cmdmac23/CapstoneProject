@@ -14,8 +14,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TimePicker;
 
 import com.google.android.material.navigation.NavigationView;
@@ -48,6 +51,13 @@ public class CreatePlanner extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Home");
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        Switch locationSwitch = (Switch) findViewById(R.id.locationSwitch);
+        LinearLayout locationLayout = (LinearLayout) findViewById(R.id.locationLayout);
+        Switch reminderSwitch = (Switch) findViewById(R.id.reminderSwitch);
+        LinearLayout reminderLayout = (LinearLayout) findViewById(R.id.reminderLayout);
+        Switch shareSwitch = (Switch) findViewById(R.id.shareSwitch);
+        LinearLayout shareLayout = (LinearLayout) findViewById(R.id.shareLayout);
 
         eventDate = (EditText) findViewById(R.id.eventDateText);
         reminderDate = (EditText) findViewById(R.id.reminderDateText);
@@ -92,6 +102,7 @@ public class CreatePlanner extends AppCompatActivity {
             }
         });
 
+        // Date functions
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -116,6 +127,7 @@ public class CreatePlanner extends AppCompatActivity {
             }
         });
 
+        // Time functions
         TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
@@ -136,6 +148,35 @@ public class CreatePlanner extends AppCompatActivity {
             public void onClick(View view){
                 lastClick = reminderTime;
                 new TimePickerDialog(CreatePlanner.this, time, defaultCalendar.get(Calendar.HOUR_OF_DAY), defaultCalendar.get(Calendar.MINUTE), false).show();
+            }
+        });
+
+        // Toggle switch functions
+        locationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b)
+                    locationLayout.setVisibility(View.VISIBLE);
+                else
+                    locationLayout.setVisibility(View.GONE);
+            }
+        });
+        reminderSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b)
+                    reminderLayout.setVisibility(View.VISIBLE);
+                else
+                    reminderLayout.setVisibility(View.GONE);
+            }
+        });
+        shareSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b)
+                    shareLayout.setVisibility(View.VISIBLE);
+                else
+                    shareLayout.setVisibility(View.GONE);
             }
         });
     }

@@ -23,9 +23,17 @@
                 android:layout_height="60dp"
                 android:gravity="bottom|center_horizontal"
                 android:text="Create Entry"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#7955852B" />
 
             <LinearLayout
+                android:id="@+id/titleLayout"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:orientation="horizontal">
@@ -52,6 +60,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/descriptionLayout"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:orientation="horizontal">
@@ -78,6 +87,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/groupLayout"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:orientation="horizontal">
@@ -112,6 +122,7 @@
 
 
             <LinearLayout
+                android:id="@+id/dateTimeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:orientation="horizontal">
@@ -123,7 +134,7 @@
 
                 <TextView
                     android:id="@+id/textView5"
-                    android:layout_width="wrap_content"
+                    android:layout_width="25dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
@@ -166,6 +177,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/difficultyLayout"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:orientation="horizontal">
@@ -177,7 +189,7 @@
 
                 <TextView
                     android:id="@+id/textView10"
-                    android:layout_width="wrap_content"
+                    android:layout_width="10dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
@@ -206,6 +218,7 @@
                 android:background="#7955852B" />
 
             <LinearLayout
+                android:id="@+id/locationSwitchLayout"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:orientation="horizontal">
@@ -233,9 +246,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/locationLayout"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <Space
                     android:layout_width="wrap_content"
@@ -258,6 +273,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/reminderSwitchLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -284,9 +300,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/reminderLayout"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <Space
                     android:layout_width="wrap_content"
@@ -295,7 +313,7 @@
 
                 <TextView
                     android:id="@+id/textView8"
-                    android:layout_width="wrap_content"
+                    android:layout_width="25dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
@@ -338,6 +356,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/shareSwitchLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -364,9 +383,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/shareLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <Space
                     android:layout_width="wrap_content"
@@ -381,6 +402,45 @@
                     android:ems="10"
                     android:hint="Recipient Username"
                     android:inputType="textPersonName" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#7955852B" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
+            <LinearLayout
+                android:id="@+id/createButtonLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/createEventButton"
+                    android:layout_width="9dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Create"
+                    app:backgroundTint="@color/middle_green" />
 
                 <Space
                     android:layout_width="wrap_content"
