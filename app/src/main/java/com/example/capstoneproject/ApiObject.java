@@ -25,11 +25,12 @@ class PlannerEvent{
     public int userId;
     public String title;
     public String description;
-    public Calendar dateTime;
+    public String group;
+    public String dateTime;
     public String location;
-    public Calendar reminder;
+    public String reminder;
     public int difficulty;
     public String fromUser;
     public String toUser;
-    public Boolean completed;
+    public int completed;
 }

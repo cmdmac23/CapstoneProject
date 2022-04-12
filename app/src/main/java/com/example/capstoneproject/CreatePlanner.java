@@ -7,21 +7,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TimePicker;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -49,7 +58,7 @@ public class CreatePlanner extends AppCompatActivity {
         setContentView(R.layout.activity_create_planner);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Home");
+        actionBar.setTitle("Create Entry");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         Switch locationSwitch = (Switch) findViewById(R.id.locationSwitch);
@@ -127,6 +136,8 @@ public class CreatePlanner extends AppCompatActivity {
             }
         });
 
+        setDefaultValues();
+
         // Time functions
         TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -181,9 +192,16 @@ public class CreatePlanner extends AppCompatActivity {
         });
     }
 
+    private void setDefaultValues(){
+        updateDateLabel(eventDate);
+        updateDateLabel(reminderDate);
+        updateTimeLabel(eventTime);
+        updateTimeLabel(reminderTime);
+    }
+
     private void updateDateLabel(EditText text){
         String myFormat="MM/dd/yy";
-        SimpleDateFormat dateFormat=new SimpleDateFormat(myFormat, Locale.US);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
         text.setText(dateFormat.format(defaultCalendar.getTime()));
         eventCalendar = defaultCalendar;
         defaultCalendar = Calendar.getInstance();
@@ -191,7 +209,7 @@ public class CreatePlanner extends AppCompatActivity {
 
     private void updateTimeLabel(EditText text){
         String myFormat="hh:mm a";
-        SimpleDateFormat dateFormat=new SimpleDateFormat(myFormat, Locale.US);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
         text.setText(dateFormat.format(defaultCalendar.getTime()));
         reminderCalendar = defaultCalendar;
         defaultCalendar = Calendar.getInstance();
@@ -202,5 +220,103 @@ public class CreatePlanner extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static void popupMessage(String message, Context context){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setMessage(message);
+        alertDialogBuilder.setNegativeButton("ok", new DialogInterface.OnClickListener(){
+
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    public void createOnClick (View view){
+        String myFormat="yyyy-MM-dd HH:mm:ss";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
+
+        PlannerEvent newEvent = new PlannerEvent();
+        newEvent.userId = Login.userid;
+        newEvent.title = ((EditText) findViewById(R.id.eventTitle)).getText().toString();
+        newEvent.description = ((EditText) findViewById(R.id.eventDescription)).getText().toString();
+        newEvent.group = ((Spinner) findViewById(R.id.groupSpinner)).getSelectedItem().toString();
+        newEvent.dateTime = dateFormat.format(eventCalendar.getTime());
+        newEvent.location = ((EditText) findViewById(R.id.locationText)).getText().toString();
+        newEvent.reminder = dateFormat.format(reminderCalendar.getTime());
+        newEvent.difficulty = ((SeekBar) findViewById(R.id.difficultyBar)).getProgress() + 1;
+        newEvent.fromUser = Login.username;
+        newEvent.toUser = ((EditText) findViewById(R.id.shareText)).getText().toString();
+        newEvent.completed = 0;
+
+        if (newEvent.title.isEmpty()){
+            popupMessage("Please enter a title", this);
+        }
+        else{
+            new CreatePlannerEntry(this, this, view, newEvent).execute();
+        }
+    }
+}
+
+class CreatePlannerEntry extends AsyncTask<String, Void, Void> {
+    Context context;
+    Activity activity;
+    View view;
+    PlannerEvent event;
+    ApiResponse apiResponse = null;
+    ProgressDialog progress;
+
+    CreatePlannerEntry(Context ctx, Activity act, View vw, PlannerEvent event) {
+        this.context = ctx;
+        this.activity = act;
+        this.view = vw;
+        this.event = event;
+    }
+
+    @Override
+    protected void onPreExecute(){
+        progress = new ProgressDialog(context);
+        progress.setMessage("Creating Entry...");
+        progress.setIndeterminate(true);
+        progress.show();
+    }
+
+    protected Void doInBackground(String... urls){
+        Gson gson = new Gson();
+        String json = gson.toJson(event);
+
+        apiResponse = (ApiResponse)ApiManagement.PostWithReturn("planner/entries/add", json, new ApiResponse(), ApiResponse.class);
+        Log.e("OUTPUT JSON", json);
+        return  null;
+    }
+
+    @Override
+    protected void onPostExecute(Void temp){
+        progress.hide();
+        Intent i = new Intent(context, PlannerMain.class);
+        context.startActivity(i);
+        activity.finish();
+
+        /*
+        if (apiResponse == null){
+
+        }
+        else{
+            if (!apiResponse.text.equals("Successful login")){       // issue with login
+                Login.popupMessage(apiResponse.text, context);
+            }
+            else{
+
+                Intent i = new Intent(context, Menu.class);
+                context.startActivity(i);
+                activity.finish();
+            }
+        }
+
+         */
     }
 }

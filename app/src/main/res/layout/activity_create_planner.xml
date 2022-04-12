@@ -17,20 +17,26 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/eventCreateTitle"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:gravity="bottom|center_horizontal"
                 android:text="Create Entry"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <View
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="#7955852B" />
+                android:background="#7955852B"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/titleLayout"
@@ -44,13 +50,13 @@
                     android:layout_weight="1" />
 
                 <EditText
-                    android:id="@+id/editTextTextPersonName2"
+                    android:id="@+id/eventTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ems="10"
                     android:hint="Title"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:textSize="22sp" />
 
                 <Space
                     android:layout_width="2dp"
@@ -71,11 +77,10 @@
                     android:layout_weight="1" />
 
                 <EditText
-                    android:id="@+id/editTextTextMultiLine"
+                    android:id="@+id/eventDescription"
                     android:layout_width="381dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:ems="10"
                     android:gravity="start|top"
                     android:hint="Description"
                     android:inputType="textMultiLine" />
@@ -107,7 +112,7 @@
                     android:textSize="18sp" />
 
                 <Spinner
-                    android:id="@+id/spinner2"
+                    android:id="@+id/groupSpinner"
                     android:layout_width="33dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
@@ -198,7 +203,7 @@
                     android:textSize="18sp" />
 
                 <SeekBar
-                    android:id="@+id/seekBar"
+                    android:id="@+id/difficultyBar"
                     style="@style/Widget.AppCompat.SeekBar.Discrete"
                     android:layout_width="101dp"
                     android:layout_height="match_parent"
@@ -258,11 +263,10 @@
                     android:layout_weight="1" />
 
                 <EditText
-                    android:id="@+id/editTextTextPersonName4"
+                    android:id="@+id/locationText"
                     android:layout_width="173dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ems="10"
                     android:hint="Location"
                     android:inputType="textPersonName" />
 
@@ -395,11 +399,10 @@
                     android:layout_weight="1" />
 
                 <EditText
-                    android:id="@+id/editTextTextPersonName5"
+                    android:id="@+id/shareText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ems="10"
                     android:hint="Recipient Username"
                     android:inputType="textPersonName" />
 
@@ -439,6 +442,7 @@
                     android:layout_width="9dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:onClick="createOnClick"
                     android:text="Create"
                     app:backgroundTint="@color/middle_green" />
 

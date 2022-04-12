@@ -26,6 +26,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Login extends AppCompatActivity {
+    public static UserLogin user = new UserLogin();
+    public static String username;
     public static int userid;
 
     @Override
@@ -34,10 +36,6 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void menuInstance(View view){
-        Intent intent = new Intent(this, Menu.class);
-        startActivity(intent);
-    }
 
     public void loginClick (View view){
         EditText userUser = findViewById(R.id.loginUsername);
@@ -46,7 +44,6 @@ public class Login extends AppCompatActivity {
         String username = userUser.getText().toString().toLowerCase().trim();
         String password = userPass.getText().toString().trim();
 
-        UserLogin user = new UserLogin();
         user.username = username;
         user.password = password;
 
@@ -65,9 +62,6 @@ public class Login extends AppCompatActivity {
 
     }
 
-    public void loginResult(ApiResponse response){
-
-    }
 
     public void forgotPasswordClick (View view){
         Intent intent = new Intent(this, ForgotPassword.class);
@@ -137,6 +131,7 @@ class AccountLogin extends AsyncTask<String, Void, Void> {
             }
             else{
                 Login.userid = apiResponse.userid;
+                Login.username = user.username;
                 Intent i = new Intent(context, Menu.class);
                 context.startActivity(i);
                 activity.finish();
