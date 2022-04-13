@@ -9,30 +9,38 @@
     tools:context=".Menu"
     tools:ignore="HardcodedText">
 
+
     <LinearLayout
-        android:layout_width="412dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="100dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/settingsButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:id="@+id/menuMainLinearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="400dp"
+        android:orientation="vertical">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
 
         <TextView
             android:id="@+id/welcomeText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/norican"
-            android:gravity="center|center_vertical"
-            android:includeFontPadding="false"
-            android:text="Insert Splashscreen"
-            android:textAllCaps="false"
-            android:textColor="@color/darkest_green"
-            android:textSize="50sp" />
-    </LinearLayout>
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Welcome"
+            android:textSize="36sp" />
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+        <TextView
+            android:id="@+id/yourEntriesText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" Your Current Entries:"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/menu_nav"

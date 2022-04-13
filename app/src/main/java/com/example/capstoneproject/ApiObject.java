@@ -34,3 +34,7 @@ class PlannerEvent{
     public String toUser;
     public int completed;
 }
+
+class PlannerEventArray{
+    public PlannerEvent[] entryArray;
+}
