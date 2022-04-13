@@ -15,8 +15,10 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CalendarView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -29,6 +31,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class PlannerMain extends AppCompatActivity {
     public DrawerLayout drawerLayout;
@@ -46,7 +49,20 @@ public class PlannerMain extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         mainLayout = (LinearLayout) findViewById(R.id.plannerMainLinearLayout);
-        populateScreen(mainLayout);
+        mainLayout.removeAllViews();
+        //populateScreen(mainLayout);
+
+        CalendarView calendar = (CalendarView) findViewById(R.id.plannerCalendar);
+        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
+                mainLayout.removeAllViews();
+                Date selectedDate = new GregorianCalendar(year, month, day).getTime();
+                populateScreen(mainLayout, selectedDate);
+            }
+        });
+
+        populateScreen(mainLayout, new Date());
 
         // Popup side menu
         drawerLayout = findViewById(R.id.my_drawer_layout);
@@ -104,19 +120,30 @@ public class PlannerMain extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void populateScreen(View view){
+    public void populateScreen(View view, Date selectedDate){
         int length = Menu.plannerEntryArray.entryArray.length;
+        SimpleDateFormat readingFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date entryDate = new Date();
+
 
         for(int i = 0; i < length; i++)
         {
-            getEntryMainLayout(this, view, Menu.plannerEntryArray.entryArray[i]);
+            try {
+                entryDate = readingFormat.parse(Menu.plannerEntryArray.entryArray[i].dateTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if (isSameDay(selectedDate, entryDate)){
+                getEntryMainLayout(this, view, Menu.plannerEntryArray.entryArray[i]);
+            }
         }
     }
 
     public static void getEntryMainLayout(Context ctx, View view, PlannerEvent entry){
         Date newDate = null;
         SimpleDateFormat readingFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm:ss aa");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm aa");
 
         try {
             newDate = readingFormat.parse(entry.dateTime);
@@ -249,12 +276,20 @@ public class PlannerMain extends AppCompatActivity {
 
         if (isChecked){
             updateStatus.completed = 1;
+            Menu.plannerEntryArray.entryArray[eventid-1].completed = 1;
         }
         else{
             updateStatus.completed = 0;
+            Menu.plannerEntryArray.entryArray[eventid-1].completed = 0;
         }
 
         new UpdateCompletionStatus(updateStatus).execute();
+    }
+
+    public static boolean isSameDay(Date firstDate, Date secondDate){
+        SimpleDateFormat comparisonFormat = new SimpleDateFormat("yyyyMMdd");
+
+        return comparisonFormat.format(firstDate).equals(comparisonFormat.format(secondDate));
     }
 
 }

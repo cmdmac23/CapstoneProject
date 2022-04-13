@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +30,7 @@ import com.google.gson.Gson;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -98,21 +100,28 @@ public class Menu extends AppCompatActivity {
     }
 
     public static void populateScreen(View view, Context ctx){
-        PlannerEventArray todaysEntries;
-        Date today = new Date();
+        SimpleDateFormat readingFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date entryDate = new Date();
 
         int length = plannerEntryArray.entryArray.length;
 
         for(int i = 0; i < length; i++)
         {
-            linearLayout.addView(getEntryLayout(ctx, plannerEntryArray.entryArray[i].title, plannerEntryArray.entryArray[i].dateTime, plannerEntryArray.entryArray[i].completed, plannerEntryArray.entryArray[i].eventId));
+            try {
+                entryDate = readingFormat.parse(plannerEntryArray.entryArray[i].dateTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (DateUtils.isToday(entryDate.getTime())){
+                linearLayout.addView(getEntryLayout(ctx, plannerEntryArray.entryArray[i].title, plannerEntryArray.entryArray[i].dateTime, plannerEntryArray.entryArray[i].completed, plannerEntryArray.entryArray[i].eventId));
+            }
         }
     }
 
     public static LinearLayout getEntryLayout(Context ctx, String title, String date, int completed, int eventid){
         Date newDate = null;
         SimpleDateFormat readingFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm:ss aa");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm aa");
 
         try {
             newDate = readingFormat.parse(date);
@@ -167,9 +176,11 @@ public class Menu extends AppCompatActivity {
 
         if (isChecked){
             updateStatus.completed = 1;
+            Menu.plannerEntryArray.entryArray[eventid-1].completed = 1;
         }
         else{
             updateStatus.completed = 0;
+            Menu.plannerEntryArray.entryArray[eventid-1].completed = 0;
         }
 
         new UpdateCompletionStatus(updateStatus).execute();
@@ -188,14 +199,6 @@ class PreloadPlannerEntries extends AsyncTask<String, Void, Void> {
         this.context = ctx;
         this.activity = act;
         //this.view = vw;
-    }
-
-    @Override
-    protected void onPreExecute(){
-        //progress = new ProgressDialog(context);
-        //progress.setMessage("Loading all planner entries (remove this later)...");
-        //progress.setIndeterminate(true);
-        //progress.show();
     }
 
     protected Void doInBackground(String... urls){
@@ -237,6 +240,7 @@ class UpdateCompletionStatus extends AsyncTask<String, Void, Void> {
         String json = gson.toJson(updateInfo);
 
         ApiManagement.PostNoReturn("planner/entries/complete", json);
+        ApiManagement.PostWithReturn("planner/entries", json, new PlannerEventArray(), PlannerEventArray.class);
         return  null;
     }
 }
