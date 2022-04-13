@@ -116,7 +116,6 @@ public class ApiManagement {
             new BufferedInputStream(conn.getInputStream());
 
             conn.disconnect();
-
         } catch (Exception e) {
             e.printStackTrace();
         }

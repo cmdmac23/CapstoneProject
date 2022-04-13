@@ -21,23 +21,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp" />
 
-            <TextView
-                android:id="@+id/eventCreateTitle"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:gravity="bottom|center_horizontal"
-                android:text="Create Entry"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:visibility="gone" />
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="#7955852B"
-                android:visibility="gone" />
-
             <LinearLayout
                 android:id="@+id/titleLayout"
                 android:layout_width="match_parent"
@@ -51,11 +34,10 @@
 
                 <EditText
                     android:id="@+id/eventTitle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="209dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Title"
-                    android:inputType="textPersonName"
                     android:textSize="22sp" />
 
                 <Space

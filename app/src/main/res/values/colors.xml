@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="lightest_green">#9DBF7F</color>
+    <color name="submenu_green">#B99DBF7F</color>
     <color name="middle_green">#55852B</color>
     <color name="darkest_green">#163A18</color>
     <color name="light_gold">#EFC660</color>

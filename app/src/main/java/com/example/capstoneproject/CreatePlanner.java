@@ -290,7 +290,8 @@ class CreatePlannerEntry extends AsyncTask<String, Void, Void> {
         String json = gson.toJson(event);
 
         apiResponse = (ApiResponse)ApiManagement.PostWithReturn("planner/entries/add", json, new ApiResponse(), ApiResponse.class);
-        Log.e("OUTPUT JSON", json);
+        Menu.plannerEntryArray = (PlannerEventArray)ApiManagement.PostWithReturn("planner/entries", json, new PlannerEventArray(), PlannerEventArray.class);
+
         return  null;
     }
 
@@ -300,23 +301,5 @@ class CreatePlannerEntry extends AsyncTask<String, Void, Void> {
         Intent i = new Intent(context, PlannerMain.class);
         context.startActivity(i);
         activity.finish();
-
-        /*
-        if (apiResponse == null){
-
-        }
-        else{
-            if (!apiResponse.text.equals("Successful login")){       // issue with login
-                Login.popupMessage(apiResponse.text, context);
-            }
-            else{
-
-                Intent i = new Intent(context, Menu.class);
-                context.startActivity(i);
-                activity.finish();
-            }
-        }
-
-         */
     }
 }

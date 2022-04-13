@@ -16,12 +16,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class Menu extends AppCompatActivity {
@@ -90,20 +98,81 @@ public class Menu extends AppCompatActivity {
     }
 
     public static void populateScreen(View view, Context ctx){
+        PlannerEventArray todaysEntries;
+        Date today = new Date();
+
         int length = plannerEntryArray.entryArray.length;
 
-
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams( LinearLayout.LayoutParams.WRAP_CONTENT,    LinearLayout.LayoutParams.WRAP_CONTENT);
-        TextView[] entries = new TextView[length];
         for(int i = 0; i < length; i++)
         {
-            entries[i] = new TextView(ctx);
-            entries[i].setTextSize(15);
-            entries[i].setLayoutParams(lp);
-            entries[i].setId(i);
-            entries[i].setText("    " + plannerEntryArray.entryArray[i].title);
-            linearLayout.addView(entries[i]);
+            linearLayout.addView(getEntryLayout(ctx, plannerEntryArray.entryArray[i].title, plannerEntryArray.entryArray[i].dateTime, plannerEntryArray.entryArray[i].completed, plannerEntryArray.entryArray[i].eventId));
         }
+    }
+
+    public static LinearLayout getEntryLayout(Context ctx, String title, String date, int completed, int eventid){
+        Date newDate = null;
+        SimpleDateFormat readingFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm:ss aa");
+
+        try {
+            newDate = readingFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        LinearLayout row = new LinearLayout(ctx);
+        row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        row.setOrientation(LinearLayout.HORIZONTAL);
+
+        TextView titleText = new TextView(ctx);
+        titleText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+        titleText.setWidth(665);
+        titleText.setText(title);
+        titleText.setTextSize(18);
+        titleText.setPadding(15,0,0,0);
+
+        TextView dateText = new TextView(ctx);
+        dateText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+        dateText.setWidth(320);
+        dateText.setText(outputFormat.format(newDate));
+        dateText.setTextSize(18);
+
+        CheckBox checkbox = new CheckBox(ctx);
+        checkbox.setText("");
+        checkbox.setHeight(50);
+        checkbox.setWidth(70);
+        checkbox.setId(eventid);
+        if (completed == 1) {
+            checkbox.setChecked(true);
+        }
+        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
+                    onCheckboxChecked(buttonView.getId(), isChecked);
+                }
+            }
+        );
+
+
+        row.addView(titleText);
+        row.addView(dateText);
+        row.addView(checkbox);
+
+        return row;
+    }
+
+    public static void onCheckboxChecked(int eventid, boolean isChecked){
+        PlannerEvent updateStatus = new PlannerEvent();
+        updateStatus.eventId = eventid;
+
+        if (isChecked){
+            updateStatus.completed = 1;
+        }
+        else{
+            updateStatus.completed = 0;
+        }
+
+        new UpdateCompletionStatus(updateStatus).execute();
     }
 }
 
@@ -153,5 +222,21 @@ class PreloadPlannerEntries extends AsyncTask<String, Void, Void> {
             Menu.plannerEntryArray = apiResponse;
             Menu.populateScreen(null, context);
         }
+    }
+}
+
+class UpdateCompletionStatus extends AsyncTask<String, Void, Void> {
+    PlannerEvent updateInfo;
+
+    UpdateCompletionStatus(PlannerEvent update) {
+        this.updateInfo = update;
+    }
+
+    protected Void doInBackground(String... urls){
+        Gson gson = new Gson();
+        String json = gson.toJson(updateInfo);
+
+        ApiManagement.PostNoReturn("planner/entries/complete", json);
+        return  null;
     }
 }
