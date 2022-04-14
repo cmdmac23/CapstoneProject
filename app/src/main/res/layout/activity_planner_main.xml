@@ -12,14 +12,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/createPlannerButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:onClick="CreateClick"
-            android:text="New" />
-
         <CalendarView
             android:id="@+id/plannerCalendar"
             android:layout_width="326dp"
@@ -30,6 +22,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/createPlannerButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:onClick="CreateClick"
+            android:text="New"
+            android:visibility="gone" />
 
         <Space
             android:layout_width="match_parent"
@@ -90,9 +91,7 @@
                 android:id="@+id/plannerMainLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-            </LinearLayout>
+                android:orientation="vertical"/>
         </ScrollView>
 
     </LinearLayout>

@@ -16,6 +16,8 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CalendarView;
@@ -38,6 +40,7 @@ public class PlannerMain extends AppCompatActivity {
     public ActionBarDrawerToggle actionBarDrawerToggle;
     public Context context = this;
     public static LinearLayout mainLayout;
+    public static PlannerEvent selectedEntry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -258,13 +261,41 @@ public class PlannerMain extends AppCompatActivity {
             menu.addView(reminderText);
         }
 
-        if(!entry.toUser.isEmpty()){
+        if(!entry.toUser.isEmpty() && !entry.toUser.equals(Login.username)){
             TextView sharedText = new TextView(ctx);
             sharedText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
             sharedText.setText("Shared With: " + entry.toUser);
             sharedText.setPadding(50,0,0,0);
 
             menu.addView(sharedText);
+        }
+        if(!entry.fromUser.isEmpty() && entry.toUser.equals(Login.username)){
+            TextView sharedText = new TextView(ctx);
+            sharedText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+            sharedText.setText("Shared From: " + entry.toUser);
+            sharedText.setPadding(50,0,0,0);
+
+            menu.addView(sharedText);
+        }
+
+        if (!entry.toUser.equals(Login.username)){
+            TextView editText = new TextView(ctx);
+            editText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
+            editText.setTextSize(18);
+            editText.setText("EDIT");
+            editText.setPadding(0,0,50,0);
+            editText.setGravity(Gravity.RIGHT);
+            editText.isClickable();
+            editText.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    selectedEntry = entry;
+                    Intent i = new Intent(ctx, UpdatePlanner.class);
+                    ctx.startActivity(i);
+                }
+            });
+
+            menu.addView(editText);
         }
 
         return menu;
