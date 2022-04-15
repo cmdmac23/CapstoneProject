@@ -55,7 +55,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:password="true" />
+            android:password="true"
+            android:visibility="gone" />
 
         <Space
             android:layout_width="match_parent"
@@ -66,6 +67,7 @@
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:onClick="submitOnClick"
             android:text="Submit"
             app:backgroundTint="@color/middle_green" />
     </LinearLayout>

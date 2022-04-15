@@ -8,13 +8,6 @@
     android:background="@color/lightest_green"
     tools:context=".Settings">
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/settings_nav"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:menu="@menu/navigation_menu" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -64,9 +57,17 @@
                 android:text="Change Username"
                 android:textAllCaps="false"
                 android:textSize="18sp"
+                android:visibility="gone"
                 app:backgroundTint="@color/middle_green" />
 
         </LinearLayout>
     </ScrollView>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/settings_nav"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/navigation_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
