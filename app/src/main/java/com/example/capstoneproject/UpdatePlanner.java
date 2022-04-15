@@ -231,9 +231,12 @@ public class UpdatePlanner extends AppCompatActivity {
             eventCalendar.setTime(dateFormat.parse(event.dateTime));
             eventDate.setText(dateFormatString.format(eventCalendar.getTime()));
             eventTime.setText(timeFormatStrong.format(eventCalendar.getTime()));
-            reminderCalendar.setTime(dateFormat.parse(event.reminder));
-            reminderDate.setText(dateFormatString.format(reminderCalendar.getTime()));
-            reminderTime.setText(timeFormatStrong.format(reminderCalendar.getTime()));
+            if (!event.reminder.isEmpty()){
+                reminderCalendar.setTime(dateFormat.parse(event.reminder));
+                reminderDate.setText(dateFormatString.format(reminderCalendar.getTime()));
+                reminderTime.setText(timeFormatStrong.format(reminderCalendar.getTime()));
+                ((Switch)findViewById(R.id.reminderSwitch)).setChecked(true);
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -304,7 +307,7 @@ public class UpdatePlanner extends AppCompatActivity {
         if (reminderSelected)
             newEvent.reminder = dateFormat.format(reminderCalendar.getTime());
         else
-            newEvent.reminder = "";
+            newEvent.reminder = null;
 
         newEvent.difficulty = ((SeekBar) findViewById(R.id.difficultyBar)).getProgress() + 1;
         newEvent.fromUser = Login.username;

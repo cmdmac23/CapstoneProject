@@ -20,6 +20,14 @@ class UserLogin{
     public String email;
 }
 
+class UpdateUserLogin{
+    public int userId;
+    public String newUsername;
+    public String password;
+    public String newPassword;
+    public String newEmail;
+}
+
 class PlannerEvent{
     public int eventId;
     public int userId;
@@ -28,7 +36,7 @@ class PlannerEvent{
     public String group;
     public String dateTime;
     public String location;
-    public String reminder;
+    public String reminder = null;
     public int difficulty;
     public String fromUser;
     public String toUser;

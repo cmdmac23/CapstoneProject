@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -18,6 +19,7 @@ public class Settings extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     public Context context = this;
+    public static String selectedOption = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,5 +80,23 @@ public class Settings extends AppCompatActivity {
             return  true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void EmailOnClick(View view){
+        selectedOption = "email";
+        Intent intent = new Intent(context, UpdateInformation.class);
+        context.startActivity(intent);
+    }
+
+    public void UsernameOnClick(View view){
+        selectedOption = "username";
+        Intent intent = new Intent(context, UpdateInformation.class);
+        context.startActivity(intent);
+    }
+
+    public void PasswordOnClick(View view){
+        selectedOption = "password";
+        Intent intent = new Intent(context, UpdateInformation.class);
+        context.startActivity(intent);
     }
 }

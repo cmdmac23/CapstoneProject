@@ -252,7 +252,7 @@ public class PlannerMain extends AppCompatActivity {
             menu.addView(locationText);
         }
 
-        if (!entry.reminder.isEmpty()){
+        if (entry.reminder != null && !entry.reminder.isEmpty()){
             TextView reminderText = new TextView(ctx);
             reminderText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
             reminderText.setText("Reminder Set For: " + entry.reminder);

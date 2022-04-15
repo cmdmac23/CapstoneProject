@@ -218,7 +218,7 @@ class PreloadPlannerEntries extends AsyncTask<String, Void, Void> {
         if (apiResponse == null){
             Log.e("TESTING ENTRY", "Response was null");
         }
-        if (apiResponse.entryArray == null){
+        else if (apiResponse.entryArray == null){
             Log.e("ENTRY ARRAY", ".eventArray was null");
         }
         else{
