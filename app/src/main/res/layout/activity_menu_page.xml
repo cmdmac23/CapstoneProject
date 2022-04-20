@@ -32,6 +32,14 @@
                 android:text="Welcome"
                 android:textSize="36sp" />
 
+            <TextView
+                android:id="@+id/menuPointsText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="Total Points: 0"
+                android:textSize="20sp" />
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="40dp" />

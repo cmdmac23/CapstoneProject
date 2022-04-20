@@ -257,7 +257,7 @@ public class CreatePlanner extends AppCompatActivity {
         if (reminderSelected)
             newEvent.reminder = dateFormat.format(reminderCalendar.getTime());
         else
-            newEvent.reminder = "";
+            newEvent.reminder = null;
 
         newEvent.difficulty = ((SeekBar) findViewById(R.id.difficultyBar)).getProgress() + 1;
         newEvent.fromUser = Login.username;

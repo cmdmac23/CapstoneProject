@@ -28,6 +28,8 @@ import android.widget.TextView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 
+import org.w3c.dom.Text;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,6 +42,7 @@ public class Menu extends AppCompatActivity {
     public Context context = this;
     public static LinearLayout linearLayout;
     public static PlannerEventArray plannerEntryArray;
+    public static TextView pointsText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,9 @@ public class Menu extends AppCompatActivity {
 
         linearLayout = (LinearLayout) findViewById(R.id.menuMainLinearLayout);
         new PreloadPlannerEntries(this, this).execute();
+
+        pointsText = (TextView) findViewById(R.id.menuPointsText);
+        pointsText.setText("Total Points: " + Login.points);
 
         // Popup side menu
         drawerLayout = findViewById(R.id.my_drawer_layout);
@@ -113,12 +119,12 @@ public class Menu extends AppCompatActivity {
                 e.printStackTrace();
             }
             if (DateUtils.isToday(entryDate.getTime())){
-                linearLayout.addView(getEntryLayout(ctx, plannerEntryArray.entryArray[i].title, plannerEntryArray.entryArray[i].dateTime, plannerEntryArray.entryArray[i].completed, plannerEntryArray.entryArray[i].eventId));
+                linearLayout.addView(getEntryLayout(ctx, plannerEntryArray.entryArray[i].title, plannerEntryArray.entryArray[i].dateTime, plannerEntryArray.entryArray[i].completed, plannerEntryArray.entryArray[i].eventId, i));
             }
         }
     }
 
-    public static LinearLayout getEntryLayout(Context ctx, String title, String date, int completed, int eventid){
+    public static LinearLayout getEntryLayout(Context ctx, String title, String date, int completed, int eventid, int index){
         Date newDate = null;
         SimpleDateFormat readingFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm aa");
@@ -150,7 +156,7 @@ public class Menu extends AppCompatActivity {
         checkbox.setText("");
         checkbox.setHeight(50);
         checkbox.setWidth(70);
-        checkbox.setId(eventid);
+        checkbox.setId(index);
         if (completed == 1) {
             checkbox.setChecked(true);
         }
@@ -170,18 +176,29 @@ public class Menu extends AppCompatActivity {
         return row;
     }
 
-    public static void onCheckboxChecked(int eventid, boolean isChecked){
+    public static void onCheckboxChecked(int index, boolean isChecked){
+        //Log.e("EVENTIDMAIN", String.valueOf(eventid));
         PlannerEvent updateStatus = new PlannerEvent();
-        updateStatus.eventId = eventid;
+        updateStatus.eventId = Menu.plannerEntryArray.entryArray[index].eventId;
+        updateStatus.userId = Login.userid;
+
+        int difficulty = Menu.plannerEntryArray.entryArray[index].difficulty;
+
 
         if (isChecked){
             updateStatus.completed = 1;
-            Menu.plannerEntryArray.entryArray[eventid-1].completed = 1;
+            Menu.plannerEntryArray.entryArray[index].completed = 1;
+            Login.points = Login.points + difficulty;
         }
         else{
             updateStatus.completed = 0;
-            Menu.plannerEntryArray.entryArray[eventid-1].completed = 0;
+            Menu.plannerEntryArray.entryArray[index].completed = 0;
+            Login.points = Login.points - difficulty;
         }
+
+        pointsText.setText("Total Points: " + Login.points);
+
+        updateStatus.difficulty = Login.points;
 
         new UpdateCompletionStatus(updateStatus).execute();
     }

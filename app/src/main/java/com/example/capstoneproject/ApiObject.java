@@ -12,6 +12,7 @@ class ApiResponse {
     public String text;
     public int code;
     public int userid;
+    public int points;
 }
 
 class UserLogin{

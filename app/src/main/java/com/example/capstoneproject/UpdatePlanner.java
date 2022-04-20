@@ -231,7 +231,7 @@ public class UpdatePlanner extends AppCompatActivity {
             eventCalendar.setTime(dateFormat.parse(event.dateTime));
             eventDate.setText(dateFormatString.format(eventCalendar.getTime()));
             eventTime.setText(timeFormatStrong.format(eventCalendar.getTime()));
-            if (!event.reminder.isEmpty()){
+            if (!(event.reminder == null) && !event.reminder.isEmpty()){
                 reminderCalendar.setTime(dateFormat.parse(event.reminder));
                 reminderDate.setText(dateFormatString.format(reminderCalendar.getTime()));
                 reminderTime.setText(timeFormatStrong.format(reminderCalendar.getTime()));

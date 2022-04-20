@@ -29,6 +29,7 @@ public class Login extends AppCompatActivity {
     public static UserLogin user = new UserLogin();
     public static String username;
     public static int userid;
+    public static int points;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +132,7 @@ class AccountLogin extends AsyncTask<String, Void, Void> {
             }
             else{
                 Login.userid = apiResponse.userid;
+                Login.points = apiResponse.points;
                 Login.username = user.username;
                 Intent i = new Intent(context, Menu.class);
                 context.startActivity(i);

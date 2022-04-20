@@ -138,12 +138,12 @@ public class PlannerMain extends AppCompatActivity {
             }
 
             if (isSameDay(selectedDate, entryDate)){
-                getEntryMainLayout(this, view, Menu.plannerEntryArray.entryArray[i]);
+                getEntryMainLayout(this, view, Menu.plannerEntryArray.entryArray[i], i);
             }
         }
     }
 
-    public static void getEntryMainLayout(Context ctx, View view, PlannerEvent entry){
+    public static void getEntryMainLayout(Context ctx, View view, PlannerEvent entry, int index){
         Date newDate = null;
         SimpleDateFormat readingFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm aa");
@@ -160,7 +160,7 @@ public class PlannerMain extends AppCompatActivity {
         LinearLayout row = new LinearLayout(ctx);
         row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         row.setOrientation(LinearLayout.HORIZONTAL);
-        row.setId(4000000 + entry.eventId);
+        //row.setId(4000000 + entry.eventId);
         row.isClickable();
         row.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -192,7 +192,7 @@ public class PlannerMain extends AppCompatActivity {
         checkbox.setText("");
         checkbox.setHeight(50);
         checkbox.setWidth(70);
-        checkbox.setId(3000000 + entry.eventId);
+        checkbox.setId(3000000 + index);
         if (entry.completed == 1) {
             checkbox.setChecked(true);
         }
@@ -215,7 +215,7 @@ public class PlannerMain extends AppCompatActivity {
         LinearLayout menu = new LinearLayout(ctx);
         menu.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         menu.setOrientation(LinearLayout.VERTICAL);
-        menu.setId(2000000 + entry.eventId);
+        //menu.setId(2000000 + entry.eventId);
         menu.setBackgroundColor(ContextCompat.getColor(ctx, R.color.submenu_green));
 
         TextView descriptionText = new TextView(ctx);
@@ -301,18 +301,27 @@ public class PlannerMain extends AppCompatActivity {
         return menu;
     }
 
-    public static void onCheckboxChecked(int eventid, boolean isChecked){
+    public static void onCheckboxChecked(int index, boolean isChecked){
+        index = index - 3000000;
         PlannerEvent updateStatus = new PlannerEvent();
-        updateStatus.eventId = eventid;
+        updateStatus.eventId = Menu.plannerEntryArray.entryArray[index].eventId;
+        updateStatus.userId = Login.userid;
+
+        int difficulty = Menu.plannerEntryArray.entryArray[index].difficulty;
+
 
         if (isChecked){
             updateStatus.completed = 1;
-            Menu.plannerEntryArray.entryArray[eventid-1].completed = 1;
+            Menu.plannerEntryArray.entryArray[index].completed = 1;
+            Login.points = Login.points + difficulty;
         }
         else{
             updateStatus.completed = 0;
-            Menu.plannerEntryArray.entryArray[eventid-1].completed = 0;
+            Menu.plannerEntryArray.entryArray[index].completed = 0;
+            Login.points = Login.points - difficulty;
         }
+
+        updateStatus.difficulty = Login.points;
 
         new UpdateCompletionStatus(updateStatus).execute();
     }
