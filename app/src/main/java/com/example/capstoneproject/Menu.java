@@ -1,12 +1,5 @@
 package com.example.capstoneproject;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -17,7 +10,6 @@ import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -25,21 +17,24 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 
-import org.w3c.dom.Text;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class Menu extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
-    public Context context = this;
+    public static Context context;
     public static LinearLayout linearLayout;
     public static PlannerEventArray plannerEntryArray;
     public static TextView pointsText;
@@ -53,6 +48,7 @@ public class Menu extends AppCompatActivity {
         actionBar.setTitle("Home");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        context = this;
         linearLayout = (LinearLayout) findViewById(R.id.menuMainLinearLayout);
         new PreloadPlannerEntries(this, this).execute();
 

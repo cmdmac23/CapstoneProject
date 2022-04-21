@@ -1,23 +1,18 @@
 package com.example.capstoneproject;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -29,19 +24,31 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TimePicker;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
+
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.SimpleTimeZone;
+import java.util.concurrent.TimeUnit;
 
 public class CreatePlanner extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
-    public Context context = this;
-
+    public static Context context;
     public Calendar defaultCalendar = Calendar.getInstance();
     public Calendar eventCalendar = Calendar.getInstance();
     public Calendar reminderCalendar = Calendar.getInstance();
@@ -57,6 +64,8 @@ public class CreatePlanner extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_planner);
+
+        context = this;
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Create Entry");
@@ -205,6 +214,16 @@ public class CreatePlanner extends AppCompatActivity {
         updateTimeLabel(reminderTime);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void createNotificationChannel(){
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        String id = "my_channel_01";
+        int importance = NotificationManager.IMPORTANCE_LOW;
+        NotificationChannel mChannel = new NotificationChannel(id, "name", importance);
+        mChannel.enableLights(true);
+        mNotificationManager.createNotificationChannel(mChannel);
+    }
+
     private void updateDateLabel(EditText text){
         String myFormat="MM/dd/yy";
         SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
@@ -242,6 +261,7 @@ public class CreatePlanner extends AppCompatActivity {
         alertDialog.show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void createOnClick (View view){
         String myFormat="yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
@@ -254,8 +274,19 @@ public class CreatePlanner extends AppCompatActivity {
         newEvent.dateTime = dateFormat.format(eventCalendar.getTime());
         newEvent.location = ((EditText) findViewById(R.id.locationText)).getText().toString();
 
-        if (reminderSelected)
+        if (reminderSelected){
             newEvent.reminder = dateFormat.format(reminderCalendar.getTime());
+            long delay = Duration.between(defaultCalendar.toInstant(), reminderCalendar.toInstant()).toMillis();
+            WorkRequest uploadWorkRequest = new OneTimeWorkRequest.Builder(UploadWorker.class)
+                    .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+                    .setInputData(
+                            new Data.Builder()
+                                    .putString("BODY", newEvent.title + " is due at " + newEvent.dateTime)
+                                    .build()
+                    )
+                    .build();
+            WorkManager.getInstance(this).enqueue(uploadWorkRequest);
+        }
         else
             newEvent.reminder = null;
 

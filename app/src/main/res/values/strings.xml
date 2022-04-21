@@ -3,6 +3,9 @@
 
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
+    <string name="channel_name">channelName</string>
+    <string name="channel_description">channelDescription</string>
+    <string name="CHANNEL_ID">channelID</string>
 
     <string-array name="planner_groups">
         <item>Work</item>
