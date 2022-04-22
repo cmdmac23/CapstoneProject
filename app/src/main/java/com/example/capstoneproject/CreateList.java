@@ -22,6 +22,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -70,8 +71,6 @@ public class CreateList extends AppCompatActivity {
                         .setNegativeButton("Cancel", null)
                         .create();
                 dialog.show();
-
-
             }
         });
 
@@ -158,6 +157,11 @@ public class CreateList extends AppCompatActivity {
             textView.setText(list.get(position));
             return(rowView);
         }
+    }
+
+    public void createOnClick (View view){
+        Intent intent = new Intent(this, ToDoMain.class);
+        startActivity(intent);
     }
 
 }
