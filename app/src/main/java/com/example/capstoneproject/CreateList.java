@@ -81,7 +81,7 @@ public class CreateList extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        NavigationView navigationView = findViewById(R.id.to_do_nav);
+        NavigationView navigationView = findViewById(R.id.create_list_nav);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -159,5 +159,5 @@ public class CreateList extends AppCompatActivity {
             return(rowView);
         }
     }
-    
+
 }
