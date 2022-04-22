@@ -14,17 +14,18 @@
         android:theme="@style/Theme.CapstoneProject"
         android:usesCleartextTraffic="true">
         <activity android:name=".UpdateInformation"></activity>
-        <activity android:name=".CreateList" />
         <activity android:name=".CreatePlanner" />
         <activity android:name=".UpdatePlanner" />
         <activity android:name=".Settings" />
         <activity android:name=".RewardsMain" />
         <activity android:name=".ToDoMain" />
+        <activity android:name=".CreateList" />
         <activity android:name=".PlannerMain" />
         <activity android:name=".ForgotPassword" />
         <activity android:name=".CreateAccount" />
         <activity android:name=".Menu" />
-        <activity android:name=".Login">
+        <activity android:name=".Login"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
