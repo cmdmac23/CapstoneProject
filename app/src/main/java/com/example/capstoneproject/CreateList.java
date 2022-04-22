@@ -3,56 +3,77 @@ package com.example.capstoneproject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.AlarmClock;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
-public class ToDoMain extends AppCompatActivity {
+public class CreateList extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     public Context context = this;
-//    public static LinearLayout mainListLayout;
-//    public static ToDoList selectedList;
+    public static ArrayList<String> toDolist = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_to_do_main);
+        setContentView(R.layout.activity_create_list);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("To-Do");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-//        ArrayList<String> newList = new ArrayList<String>();
-//        newList.add("item1");
-//        newList.add("item2");
-//        newList.add("item3");
+        final ListView listView = findViewById(R.id.listView);
+        final TextAdapter adapter = new TextAdapter();
 
-        Button btn = (Button)findViewById(R.id.createListButton);
+        adapter.setData(toDolist);
+        listView.setAdapter(adapter);
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        final Button newTaskButton = findViewById(R.id.newTaskButton);
+
+        newTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ToDoMain.this, CreateList.class));
+            public void onClick(View view) {
+                EditText taskInput = new EditText(CreateList.this);
+                taskInput.setSingleLine();
+                AlertDialog dialog = new AlertDialog.Builder(CreateList.this)
+                        .setTitle("Add a New Task")
+                        .setMessage("What is your new task?")
+                        .setView(taskInput)
+                        .setPositiveButton("Add task", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                toDolist.add(taskInput.getText().toString());
+                                adapter.setData(toDolist);
+                            }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .create();
+                dialog.show();
+
+
             }
         });
-
-//        mainListLayout = (LinearLayout) findViewById(R.id.listMainLinearLayout);
-//        mainListLayout.removeAllViews();
-//        populateScreen(mainListLayout, newList);
 
         // Popup side menu
         drawerLayout = findViewById(R.id.my_drawer_layout);
@@ -98,23 +119,7 @@ public class ToDoMain extends AppCompatActivity {
         });
     }
 
-//    private void populateScreen(View view, ArrayList<String> newList) {
-//        int length = Menu.tdListArray.toDoListArray.length;
-//        for (int i = 0; i < length; i++) {
-//            //getListMainLayout(this, view, Menu.plannerEntryArray.entryArray[i], i);
-//        }
-//    }
-
-//    getListLayout(Context ctx, View view, ArrayList<String> testList, int index) {
-//        LinearLayout subListLayout = getListSubLayout(ctx, testList);
-//
-//    }
-
-    public void CreateClick (View view){
-        Intent intent = new Intent(this, CreateList.class);
-        startActivity(intent);
-    }
-
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)){
             return  true;
@@ -122,4 +127,37 @@ public class ToDoMain extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    class TextAdapter extends BaseAdapter {
+        public ArrayList<String> list = new ArrayList<String>();
+        void setData(ArrayList<String> newList) {
+            list.clear();
+            list.addAll(newList);
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getCount() {
+            return list.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View view, ViewGroup viewGroup) {
+            LayoutInflater inflater = (LayoutInflater) CreateList.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View rowView = inflater.inflate(R.layout.listitem, viewGroup, false);
+            TextView textView = rowView.findViewById(R.id.listItem);
+            textView.setText(list.get(position));
+            return(rowView);
+        }
+    }
+    
 }
