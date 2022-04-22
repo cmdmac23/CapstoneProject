@@ -42,8 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:onClick="CreateClick"
-            android:text="New"
-            android:visibility="gone" />
+            android:text="New" />
 
         <View
             android:id="@+id/view26"
