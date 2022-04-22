@@ -96,8 +96,50 @@
 
             </LinearLayout>
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+
             <View
                 android:id="@+id/view5"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/darkest_green" />
+
+            <View
+                android:id="@+id/view26"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/darkest_green" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="29dp"
+                android:background="@color/darkest_green"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView30"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:paddingLeft="5dp"
+                    android:text="To Do Lists"
+                    android:textColor="@color/lightest_green"
+                    android:textSize="18sp" />
+
+                <CheckBox
+                    android:id="@+id/checkBox4"
+                    android:layout_width="5dp"
+                    android:layout_height="28dp"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:clickable="false"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view33"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:background="@color/darkest_green" />

@@ -24,10 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_weight="1"/>
-
-
     </LinearLayout>
-
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/create_list_nav"

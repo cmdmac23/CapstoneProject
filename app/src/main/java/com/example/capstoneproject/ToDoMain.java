@@ -41,15 +41,6 @@ public class ToDoMain extends AppCompatActivity {
 //        newList.add("item2");
 //        newList.add("item3");
 
-        Button btn = (Button)findViewById(R.id.createListButton);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ToDoMain.this, CreateList.class));
-            }
-        });
-
 //        mainListLayout = (LinearLayout) findViewById(R.id.listMainLinearLayout);
 //        mainListLayout.removeAllViews();
 //        populateScreen(mainListLayout, newList);
@@ -109,6 +100,11 @@ public class ToDoMain extends AppCompatActivity {
 //        LinearLayout subListLayout = getListSubLayout(ctx, testList);
 //
 //    }
+
+    public void goToActivity2 (View view){
+        Intent intent = new Intent (this, CreateList.class);
+        startActivity(intent);
+    }
 
     public void CreateClick (View view){
         Intent intent = new Intent(this, CreateList.class);
