@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CapstoneProject"
         android:usesCleartextTraffic="true">
-        <activity android:name=".UpdateInformation"></activity>
+        <activity android:name=".UnlockReward"></activity>
+        <activity android:name=".UpdateInformation" />
         <activity android:name=".CreatePlanner" />
         <activity android:name=".UpdatePlanner" />
         <activity android:name=".Settings" />

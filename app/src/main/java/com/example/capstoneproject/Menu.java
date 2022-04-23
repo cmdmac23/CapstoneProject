@@ -37,6 +37,7 @@ public class Menu extends AppCompatActivity {
     public static Context context;
     public static LinearLayout linearLayout;
     public static PlannerEventArray plannerEntryArray;
+    public static RewardArray rewardArray;
     public static TextView pointsText;
 
     @Override
@@ -51,6 +52,7 @@ public class Menu extends AppCompatActivity {
         context = this;
         linearLayout = (LinearLayout) findViewById(R.id.menuMainLinearLayout);
         new PreloadPlannerEntries(this, this).execute();
+        new PreloadRewards(this, this).execute();
 
         pointsText = (TextView) findViewById(R.id.menuPointsText);
         pointsText.setText("Total Points: " + Login.points);
@@ -241,6 +243,42 @@ class PreloadPlannerEntries extends AsyncTask<String, Void, Void> {
     }
 }
 
+class PreloadRewards extends AsyncTask<String, Void, Void> {
+    Context context;
+    Activity activity;
+    RewardArray apiResponse = null;
+
+    PreloadRewards(Context ctx, Activity act) {
+        this.context = ctx;
+        this.activity = act;
+    }
+
+    protected Void doInBackground(String... urls){
+        RewardItem input = new RewardItem();
+        input.userId = Login.userid;
+
+        Gson gson = new Gson();
+        String json = gson.toJson(input);
+
+        apiResponse = (RewardArray) ApiManagement.PostWithReturn("rewards", json, new RewardArray(), RewardArray.class);
+        return  null;
+    }
+
+    @Override
+    protected void onPostExecute(Void temp){
+        //progress.hide();
+        if (apiResponse == null){
+            Log.e("TESTING ENTRY", "Response was null");
+        }
+        else if (apiResponse.rewardArray == null){
+            Log.e("ENTRY ARRAY", ".eventArray was null");
+        }
+        else{
+            Menu.rewardArray = apiResponse;
+        }
+    }
+}
+
 class UpdateCompletionStatus extends AsyncTask<String, Void, Void> {
     PlannerEvent updateInfo;
 
@@ -253,7 +291,7 @@ class UpdateCompletionStatus extends AsyncTask<String, Void, Void> {
         String json = gson.toJson(updateInfo);
 
         ApiManagement.PostNoReturn("planner/entries/complete", json);
-        ApiManagement.PostWithReturn("planner/entries", json, new PlannerEventArray(), PlannerEventArray.class);
+        //ApiManagement.PostWithReturn("planner/entries", json, new PlannerEventArray(), PlannerEventArray.class);
         return  null;
     }
 }

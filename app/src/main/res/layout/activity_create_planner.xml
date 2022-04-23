@@ -437,11 +437,4 @@
         </LinearLayout>
     </ScrollView>
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/create_planner_nav"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:menu="@menu/navigation_menu" />
-
 </androidx.drawerlayout.widget.DrawerLayout>

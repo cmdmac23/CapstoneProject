@@ -12,4 +12,12 @@
         <item>Personal</item>
         <item>Other</item>
     </string-array>
+
+    <string-array name="plant_options">
+        <item>Sprout</item>
+        <item>Aloe</item>
+        <item>Flowers</item>
+        <item>Cactus</item>
+        <item>Lilies</item>
+    </string-array>
 </resources>

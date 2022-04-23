@@ -15,7 +15,7 @@
         <CalendarView
             android:id="@+id/plannerCalendar"
             android:layout_width="326dp"
-            android:layout_height="260dp"
+            android:layout_height="300dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:focusedMonthDateColor="#FFFFFF"

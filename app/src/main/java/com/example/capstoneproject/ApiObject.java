@@ -1,9 +1,6 @@
 package com.example.capstoneproject;
 
 
-import java.util.Calendar;
-import java.util.Date;
-
 class Authortization{
     public String token;
 }
@@ -46,4 +43,15 @@ class PlannerEvent{
 
 class PlannerEventArray{
     public PlannerEvent[] entryArray;
+}
+
+class RewardItem{
+    public int userId;
+    public int plantId;
+    public int points;
+    public String label;
+}
+
+class RewardArray{
+    public RewardItem[] rewardArray;
 }

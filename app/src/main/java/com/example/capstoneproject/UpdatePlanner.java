@@ -12,7 +12,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -22,22 +21,18 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
-import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 
 import java.text.ParseException;
@@ -86,44 +81,6 @@ public class UpdatePlanner extends AppCompatActivity {
         reminderDate = (EditText) findViewById(R.id.reminderDateText);
         eventTime = (EditText) findViewById(R.id.eventTimeText);
         reminderTime = (EditText) findViewById(R.id.reminderTimeText);
-
-        // Popup side menu
-        drawerLayout = findViewById(R.id.my_drawer_layout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        NavigationView navigationView = findViewById(R.id.create_planner_nav);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Intent i;
-                switch (menuItem.getItemId()){
-                    case R.id.nav_home:
-                        i = new Intent(context, Menu.class);
-                        startActivity(i);
-                        break;
-                    case R.id.nav_planner:
-                        i = new Intent(context, PlannerMain.class);
-                        startActivity(i);
-                        break;
-                    case R.id.nav_todo:
-                        i = new Intent(context, ToDoMain.class);
-                        startActivity(i);
-                        break;
-                    case R.id.nav_rewards:
-                        i = new Intent(context, RewardsMain.class);
-                        startActivity(i);
-                        break;
-                    case R.id.nav_settings:
-                        i = new Intent(context, Settings.class);
-                        startActivity(i);
-                        break;
-                }
-                drawerLayout.closeDrawer(GravityCompat.START);
-                return true;
-            }
-        });
 
         // Date functions
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -211,6 +168,12 @@ public class UpdatePlanner extends AppCompatActivity {
         populateBlanks();
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
     private void populateBlanks(){
         PlannerEvent event = PlannerMain.selectedEntry;
         String myFormat = "yyyy-MM-dd HH:mm:ss";
@@ -276,13 +239,6 @@ public class UpdatePlanner extends AppCompatActivity {
         text.setText(dateFormat.format(defaultCalendar.getTime()));
         reminderCalendar = defaultCalendar;
         defaultCalendar = Calendar.getInstance();
-    }
-
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     public static void popupMessage(String message, Context context){
