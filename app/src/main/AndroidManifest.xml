@@ -14,6 +14,7 @@
         android:theme="@style/Theme.CapstoneProject"
         android:usesCleartextTraffic="true">
         <activity android:name=".UnlockReward"></activity>
+        <activity android:name=".CreateList" />
         <activity android:name=".UpdateInformation" />
         <activity android:name=".CreatePlanner" />
         <activity android:name=".UpdatePlanner" />
