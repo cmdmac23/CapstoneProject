@@ -1,7 +1,9 @@
 package com.example.capstoneproject;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -98,15 +100,34 @@ public class UnlockReward extends AppCompatActivity {
         return true;
     }
 
+    public static void popupMessage(String message, Context context){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setMessage(message);
+        alertDialogBuilder.setNegativeButton("ok", new DialogInterface.OnClickListener(){
+
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
     public void unlockOnClick(View view){
-        RewardItem rewardInfo = new RewardItem();
+        if (pointCost > Login.points){
+            popupMessage("You do not have enough points to unlock this item", this);
+        }
+        else{
+            RewardItem rewardInfo = new RewardItem();
 
-        rewardInfo.userId = Login.userid;
-        rewardInfo.plantId = plantSelection.getSelectedItemPosition();
-        rewardInfo.label = plantLabel.getText().toString();
-        rewardInfo.points = pointCost;
+            rewardInfo.userId = Login.userid;
+            rewardInfo.plantId = plantSelection.getSelectedItemPosition();
+            rewardInfo.label = plantLabel.getText().toString();
+            rewardInfo.points = pointCost;
 
-        new UnlockRewardTask(context, rewardInfo).execute();
+            new UnlockRewardTask(context, rewardInfo).execute();
+        }
     }
 }
 
