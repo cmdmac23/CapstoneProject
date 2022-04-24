@@ -7,26 +7,14 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/app_logo"
-        android:label="inFocus"
-        android:roundIcon="@mipmap/app_logo"
+        android:icon="@mipmap/ic_launcher"
+        android:label=""
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CapstoneProject"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ResetPassword">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="cmac23-001-site1.etempurl.com"
-                    android:path="/reset"
-                    android:scheme="http" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".UnlockReward" />
+        <activity android:name=".UnlockReward"></activity>
+        <activity android:name=".CreateList" />
         <activity android:name=".UpdateInformation" />
         <activity android:name=".CreatePlanner" />
         <activity android:name=".UpdatePlanner" />
