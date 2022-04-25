@@ -161,7 +161,7 @@ public class Menu extends AppCompatActivity {
         checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-                    onCheckboxChecked(buttonView.getId(), isChecked);
+                    onCheckboxChecked(buttonView.getId(), isChecked, checkbox);
                 }
             }
         );
@@ -174,8 +174,7 @@ public class Menu extends AppCompatActivity {
         return row;
     }
 
-    public static void onCheckboxChecked(int index, boolean isChecked){
-        //Log.e("EVENTIDMAIN", String.valueOf(eventid));
+    public static void onCheckboxChecked(int index, boolean isChecked, CheckBox checkBox){
         PlannerEvent updateStatus = new PlannerEvent();
         updateStatus.eventId = Menu.plannerEntryArray.entryArray[index].eventId;
         updateStatus.userId = Login.userid;
@@ -189,9 +188,17 @@ public class Menu extends AppCompatActivity {
             Login.points = Login.points + difficulty;
         }
         else{
-            updateStatus.completed = 0;
-            Menu.plannerEntryArray.entryArray[index].completed = 0;
-            Login.points = Login.points - difficulty;
+            if (Login.points < difficulty){
+                checkBox.setChecked(true);
+                String message = "You can not mark this item as incomplete as it would cause you to have negative points";
+                Login.popupMessage(message, context);
+                return;
+            }
+            else{
+                updateStatus.completed = 0;
+                Menu.plannerEntryArray.entryArray[index].completed = 0;
+                Login.points = Login.points - difficulty;
+            }
         }
 
         pointsText.setText("Total Points: " + Login.points);

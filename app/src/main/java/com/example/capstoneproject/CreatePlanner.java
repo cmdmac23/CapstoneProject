@@ -3,8 +3,6 @@ package com.example.capstoneproject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -178,16 +176,6 @@ public class CreatePlanner extends AppCompatActivity {
         updateTimeLabel(reminderTime);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void createNotificationChannel(){
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        String id = "my_channel_01";
-        int importance = NotificationManager.IMPORTANCE_LOW;
-        NotificationChannel mChannel = new NotificationChannel(id, "name", importance);
-        mChannel.enableLights(true);
-        mNotificationManager.createNotificationChannel(mChannel);
-    }
-
     private void updateDateLabel(EditText text){
         String myFormat="MM/dd/yy";
         SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
@@ -233,12 +221,14 @@ public class CreatePlanner extends AppCompatActivity {
 
         if (reminderSelected){
             newEvent.reminder = dateFormat.format(reminderCalendar.getTime());
+            defaultCalendar = Calendar.getInstance();
+            reminderCalendar.set(Calendar.MILLISECOND, 0);
             long delay = Duration.between(defaultCalendar.toInstant(), reminderCalendar.toInstant()).toMillis();
             WorkRequest uploadWorkRequest = new OneTimeWorkRequest.Builder(UploadWorker.class)
                     .setInitialDelay(delay, TimeUnit.MILLISECONDS)
                     .setInputData(
                             new Data.Builder()
-                                    .putString("BODY", newEvent.title + " is due at " + newEvent.dateTime)
+                                    .putString("BODY", newEvent.title + " is due on " + newEvent.dateTime)
                                     .build()
                     )
                     .build();

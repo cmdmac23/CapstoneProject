@@ -276,7 +276,7 @@ public class UpdatePlanner extends AppCompatActivity {
                     .setInitialDelay(delay, TimeUnit.MILLISECONDS)
                     .setInputData(
                             new Data.Builder()
-                                    .putString("BODY", newEvent.title + " is due at " + newEvent.dateTime)
+                                    .putString("BODY", newEvent.title + " is due on " + newEvent.dateTime)
                                     .build()
                     )
                     .build();

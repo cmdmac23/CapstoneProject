@@ -32,7 +32,7 @@ import java.util.GregorianCalendar;
 public class PlannerMain extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
-    public Context context = this;
+    public static Context context;
     public static LinearLayout mainLayout;
     public static PlannerEvent selectedEntry;
 
@@ -40,6 +40,8 @@ public class PlannerMain extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_planner_main);
+
+        context = this;
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Planner");
@@ -192,7 +194,7 @@ public class PlannerMain extends AppCompatActivity {
         checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-                onCheckboxChecked(buttonView.getId(), isChecked);
+                onCheckboxChecked(buttonView.getId(), isChecked, checkbox);
             }
         });
 
@@ -248,7 +250,7 @@ public class PlannerMain extends AppCompatActivity {
         if (entry.reminder != null && !entry.reminder.isEmpty()){
             TextView reminderText = new TextView(ctx);
             reminderText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
-            reminderText.setText("Reminder Set For: " + entry.reminder);
+            reminderText.setText("Reminder Set For: " + entry.reminder.substring(0, entry.reminder.length()-3));
             reminderText.setPadding(50,0,0,0);
 
             menu.addView(reminderText);
@@ -294,7 +296,7 @@ public class PlannerMain extends AppCompatActivity {
         return menu;
     }
 
-    public static void onCheckboxChecked(int index, boolean isChecked){
+    public static void onCheckboxChecked(int index, boolean isChecked, CheckBox checkBox){
         index = index - 3000000;
         PlannerEvent updateStatus = new PlannerEvent();
         updateStatus.eventId = Menu.plannerEntryArray.entryArray[index].eventId;
@@ -309,9 +311,17 @@ public class PlannerMain extends AppCompatActivity {
             Login.points = Login.points + difficulty;
         }
         else{
-            updateStatus.completed = 0;
-            Menu.plannerEntryArray.entryArray[index].completed = 0;
-            Login.points = Login.points - difficulty;
+            if (Login.points < difficulty){
+                checkBox.setChecked(true);
+                String message = "You can not mark this item as incomplete as it would cause you to have negative points";
+                Login.popupMessage(message, context);
+                return;
+            }
+            else{
+                updateStatus.completed = 0;
+                Menu.plannerEntryArray.entryArray[index].completed = 0;
+                Login.points = Login.points - difficulty;
+            }
         }
 
         updateStatus.difficulty = Login.points;
