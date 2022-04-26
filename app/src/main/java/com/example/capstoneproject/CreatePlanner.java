@@ -1,12 +1,10 @@
 package com.example.capstoneproject;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -23,9 +21,7 @@ import android.widget.TimePicker;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
@@ -40,8 +36,6 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class CreatePlanner extends AppCompatActivity {
-    public DrawerLayout drawerLayout;
-    public ActionBarDrawerToggle actionBarDrawerToggle;
     public static Context context;
     public Calendar defaultCalendar = Calendar.getInstance();
     public Calendar eventCalendar = Calendar.getInstance();
@@ -61,10 +55,12 @@ public class CreatePlanner extends AppCompatActivity {
 
         context = this;
 
+        // Set top bar information
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Create Entry");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        // Get all of the buttons set for later use
         Switch locationSwitch = (Switch) findViewById(R.id.locationSwitch);
         LinearLayout locationLayout = (LinearLayout) findViewById(R.id.locationLayout);
         Switch reminderSwitch = (Switch) findViewById(R.id.reminderSwitch);
@@ -72,6 +68,7 @@ public class CreatePlanner extends AppCompatActivity {
         Switch shareSwitch = (Switch) findViewById(R.id.shareSwitch);
         LinearLayout shareLayout = (LinearLayout) findViewById(R.id.shareLayout);
 
+        // Get all of the date/time text boxes for later use
         eventDate = (EditText) findViewById(R.id.eventDateText);
         reminderDate = (EditText) findViewById(R.id.reminderDateText);
         eventTime = (EditText) findViewById(R.id.eventTimeText);
@@ -102,6 +99,7 @@ public class CreatePlanner extends AppCompatActivity {
             }
         });
 
+        // Set a default date/time for all date/time blanks
         setDefaultValues();
 
         // Time functions
@@ -149,7 +147,6 @@ public class CreatePlanner extends AppCompatActivity {
                     reminderLayout.setVisibility(View.GONE);
                     reminderSelected = false;
                 }
-
             }
         });
         shareSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -192,20 +189,6 @@ public class CreatePlanner extends AppCompatActivity {
         defaultCalendar = Calendar.getInstance();
     }
 
-    public static void popupMessage(String message, Context context){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder.setMessage(message);
-        alertDialogBuilder.setNegativeButton("ok", new DialogInterface.OnClickListener(){
-
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void createOnClick (View view){
         String myFormat="yyyy-MM-dd HH:mm:ss";
@@ -223,6 +206,7 @@ public class CreatePlanner extends AppCompatActivity {
             newEvent.reminder = dateFormat.format(reminderCalendar.getTime());
             defaultCalendar = Calendar.getInstance();
             reminderCalendar.set(Calendar.MILLISECOND, 0);
+            // Schedule the notification
             long delay = Duration.between(defaultCalendar.toInstant(), reminderCalendar.toInstant()).toMillis();
             WorkRequest uploadWorkRequest = new OneTimeWorkRequest.Builder(UploadWorker.class)
                     .setInitialDelay(delay, TimeUnit.MILLISECONDS)
@@ -243,7 +227,7 @@ public class CreatePlanner extends AppCompatActivity {
         newEvent.completed = 0;
 
         if (newEvent.title.isEmpty()){
-            popupMessage("Please enter a title", this);
+            Login.popupMessage("Please enter a title", this);
         }
         else{
             new CreatePlannerEntry(this, this, view, newEvent).execute();

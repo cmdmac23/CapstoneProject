@@ -4,7 +4,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -40,9 +39,6 @@ public class UploadWorker extends Worker {
 
         // notificationId is a unique int for each notification that you must define
         notificationManager.notify(100, builder.build());
-
-
-        Log.e("Testing", "completed work");
 
         // Indicate whether the work finished successfully with the Result
         return Result.success();

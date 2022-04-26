@@ -1,12 +1,10 @@
 package com.example.capstoneproject;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -241,20 +239,6 @@ public class UpdatePlanner extends AppCompatActivity {
         defaultCalendar = Calendar.getInstance();
     }
 
-    public static void popupMessage(String message, Context context){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder.setMessage(message);
-        alertDialogBuilder.setNegativeButton("ok", new DialogInterface.OnClickListener(){
-
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void createOnClick (View view){
         String myFormat="yyyy-MM-dd HH:mm:ss";
@@ -291,7 +275,7 @@ public class UpdatePlanner extends AppCompatActivity {
         newEvent.completed = 0;
 
         if (newEvent.title.isEmpty()){
-            popupMessage("Please enter a title", this);
+            Login.popupMessage("Please enter a title", this);
         }
         else{
             Log.e("Update?", newEvent.title);

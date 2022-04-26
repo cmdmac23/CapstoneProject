@@ -1,7 +1,5 @@
 package com.example.capstoneproject;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -10,13 +8,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 
@@ -72,7 +71,7 @@ public class UpdateInformation extends AppCompatActivity {
         UpdateUserLogin newUser = new UpdateUserLogin();
 
         if(box1.getText().toString().isEmpty() || box2.getText().toString().isEmpty()){
-            popupMessage("Please fill in all information", this);
+            Login.popupMessage("Please fill in all information", this);
         }
 
         if (Settings.selectedOption.equals("email")){
@@ -87,7 +86,7 @@ public class UpdateInformation extends AppCompatActivity {
         }
         else{
             if(!box2.getText().toString().equals(box3.getText().toString())){
-                popupMessage("The passwords you entered do not match", this);
+                Login.popupMessage("The passwords you entered do not match", this);
                 box2.setText("");
                 box3.setText("");
             }
@@ -103,19 +102,6 @@ public class UpdateInformation extends AppCompatActivity {
                 new UpdateUserProfile(this, this, newUser, Settings.selectedOption).execute();
             }
         }
-    }
-
-    public static void popupMessage(String message, Context context){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder.setMessage(message);
-        alertDialogBuilder.setNegativeButton("ok", new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
     }
 
     public static void popupMessageNewScene(String message, Context context, Activity activity){
