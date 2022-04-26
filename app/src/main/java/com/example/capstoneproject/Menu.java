@@ -37,8 +37,10 @@ public class Menu extends AppCompatActivity {
     public static Context context;
     public static LinearLayout linearLayout;
     public static PlannerEventArray plannerEntryArray;
+    public static ToDoListArray toDoListArray;
     public static RewardArray rewardArray;
     public static TextView pointsText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -246,6 +248,46 @@ class PreloadPlannerEntries extends AsyncTask<String, Void, Void> {
         else{
             Menu.plannerEntryArray = apiResponse;
             Menu.populateScreen(null, context);
+        }
+    }
+}
+
+class PreloadToDoLists extends AsyncTask<String, Void, Void> {
+    Context context;
+    Activity activity;
+    //View view;
+    ToDoListArray apiResponse = null;
+    ProgressDialog progress;
+
+    PreloadToDoLists(Context ctx, Activity act) {
+        this.context = ctx;
+        this.activity = act;
+        //this.view = vw;
+    }
+
+    protected Void doInBackground(String... urls){
+        ToDoList input = new ToDoList();
+        input.userId = Login.userid;
+
+        Gson gson = new Gson();
+        String json = gson.toJson(input);
+
+        apiResponse = (ToDoListArray) ApiManagement.PostWithReturn("todolist/lists", json, new ToDoListArray(), ToDoListArray.class);
+        return  null;
+    }
+
+    @Override
+    protected void onPostExecute(Void temp){
+        //progress.hide();
+        if (apiResponse == null){
+            Log.e("TESTING ENTRY", "Response was null");
+        }
+        else if (apiResponse.listArray == null){
+            Log.e("ENTRY ARRAY", ".eventArray was null");
+        }
+        else{
+            Menu.toDoListArray = apiResponse;
+            //Menu.populateScreen(null, context);
         }
     }
 }
