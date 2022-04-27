@@ -54,6 +54,7 @@ class ToDoList {
     public String fromUser;
     public String toUser;
     public int completed;
+    public ToDoListItem[] listItemArray;
 }
 
 class ToDoListItem {
@@ -65,7 +66,7 @@ class ToDoListItem {
 }
 
 class ToDoListArray {
-    public ToDoList[] toDoListArray;
+    public ToDoList[] listArray;
 }
 
 class RewardItem{
