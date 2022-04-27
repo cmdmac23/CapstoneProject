@@ -54,6 +54,7 @@ public class Menu extends AppCompatActivity {
         context = this;
         linearLayout = (LinearLayout) findViewById(R.id.menuMainLinearLayout);
         new PreloadPlannerEntries(this, this).execute();
+        new PreloadToDoLists(this, this).execute();
         new PreloadRewards(this, this).execute();
 
         pointsText = (TextView) findViewById(R.id.menuPointsText);
