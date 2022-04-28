@@ -32,15 +32,12 @@ public class UploadWorker extends Worker {
                 .setContentTitle("inFocus")
                 .setContentText(getInputData().getString("BODY"))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                // Set the intent that will fire when the user taps the notification
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(CreatePlanner.context);
 
-        // notificationId is a unique int for each notification that you must define
         notificationManager.notify(100, builder.build());
 
-        // Indicate whether the work finished successfully with the Result
         return Result.success();
     }
 }

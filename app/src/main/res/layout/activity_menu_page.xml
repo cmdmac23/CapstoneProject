@@ -28,9 +28,11 @@
                 android:id="@+id/welcomeText2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/potta_one"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="WELCOME"
-                android:textSize="36sp" />
+                android:textColor="@color/darkest_green"
+                android:textSize="40sp" />
 
             <TextView
                 android:id="@+id/menuPointsText"
