@@ -116,7 +116,7 @@ public class ToDoMain extends AppCompatActivity {
     }
 
     public static void getListMainLayout(Context ctx, View view, ToDoList list, int index) {
-        LinearLayout subLayout = getListSubLayout(ctx, list);
+        LinearLayout subLayout = getListSubLayout(ctx, list, index);
         subLayout.setVisibility(View.GONE);
 
         LinearLayout row = new LinearLayout(ctx);
@@ -143,29 +143,13 @@ public class ToDoMain extends AppCompatActivity {
         titleText.setTextSize(18);
         titleText.setPadding(15,0,0,0);
 
-        CheckBox checbox = new CheckBox(ctx);
-        checbox.setText("");
-        checbox.setHeight(50);
-        checbox.setWidth(70);
-        checbox.setId(3000000 + index);
-        if (list.completed == 1) {
-            checbox.setChecked(true);
-        }
-        checbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-                onCheckBoxChecked(buttonView.getId(), isChecked);
-            }
-        });
-
         row.addView(titleText);
-        row.addView(checbox);
 
         mainListLayout.addView(row);
         mainListLayout.addView(subLayout);
     }
 
-    public static LinearLayout getListSubLayout(Context ctx, ToDoList list) {
+    public static LinearLayout getListSubLayout(Context ctx, ToDoList list, int index) {
         LinearLayout menu = new LinearLayout(ctx);
         menu.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         menu.setOrientation(LinearLayout.VERTICAL);
@@ -183,13 +167,36 @@ public class ToDoMain extends AppCompatActivity {
 
         groupDifficult.addView(groupText);
 
-        TextView listItemText = new TextView(ctx);
-        listItemText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
-        listItemText.setText(list.listItem);
-        listItemText.setTextSize(18);
-        listItemText.setPadding(50,0,0,0);
+        int length = list.listItemArray.length;
+        for (int i = 0; i < length; i++) {
+            TextView listItemText = new TextView(ctx);
+            listItemText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+            listItemText.setText(list.listItemArray[i].itemName);
+            listItemText.setTextSize(18);
+            listItemText.setPadding(50, 0, 0, 0);
+            menu.addView(listItemText);
 
-        menu.addView(listItemText);
+            TextView difficultyText = new TextView(ctx);
+            difficultyText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1));
+            difficultyText.setText("Difficulty: " + list.listItemArray[i].difficulty);
+            menu.addView(difficultyText);
+
+            CheckBox checbox = new CheckBox(ctx);
+            checbox.setText("");
+            checbox.setHeight(50);
+            checbox.setWidth(70);
+            checbox.setId(9000000 + index);
+            if (list.listItemArray[i].completed == 1) {
+                checbox.setChecked(true);
+            }
+            checbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
+                    onCheckBoxChecked(buttonView.getId(), isChecked);
+                }
+            });
+            menu.addView(checbox);
+        }
 
         if(!list.toUser.isEmpty() && !list.toUser.equals(Login.username)){
             TextView sharedText = new TextView(ctx);
@@ -231,18 +238,28 @@ public class ToDoMain extends AppCompatActivity {
     }
 
     public static void onCheckBoxChecked(int index, boolean isChecked) {
-        index = index - 3000000;
-        ToDoList updateStatus = new ToDoList();
-        updateStatus.listId = Menu.toDoListArray.listArray[index].listId;
+        index = index - 9000000;
+        ToDoListItem updateStatus = new ToDoListItem();
+        updateStatus.listItemId = Menu.toDoListArray.listArray[index].listItemArray[index].listItemId;
         updateStatus.userId = Login.userid;
+
+        int difficulty = updateStatus.difficulty;
 
         if (isChecked) {
             updateStatus.completed = 1;
-            Menu.toDoListArray.listArray[index].completed = 1;
+            Menu.toDoListArray.listArray[index].listItemArray[index].completed = 1;
+            Login.points = Login.points + difficulty;
         }
         else {
             updateStatus.completed = 0;
-            Menu.toDoListArray.listArray[index].completed = 0;
+            Menu.toDoListArray.listArray[index].listItemArray[index].completed = 0;
+            Login.points = Login.points + difficulty;
+
         }
+
+        updateStatus.difficulty = Login.points;
+
+        new UpdateListCompletionStatus(updateStatus).execute();
+
     }
 }

@@ -33,7 +33,7 @@
                     android:layout_weight="1" />
 
                 <EditText
-                    android:id="@+id/eventTitle"
+                    android:id="@+id/listTitle"
                     android:layout_width="209dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -87,7 +87,7 @@
                 android:background="#7955852B" />
 
             <LinearLayout
-                android:id="@+id/shareSwitchLayout"
+                android:id="@+id/shareListSwitchLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -114,7 +114,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/shareLayout"
+                android:id="@+id/shareListLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -217,7 +217,7 @@
                     android:layout_weight="1" />
 
                 <Button
-                    android:id="@+id/createEventButton"
+                    android:id="@+id/createListButton"
                     android:layout_width="9dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

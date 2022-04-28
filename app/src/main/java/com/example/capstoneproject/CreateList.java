@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -43,7 +44,7 @@ public class CreateList extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     public Context context = this;
-    public static ArrayList<ToDoListItem> items = new ArrayList<ToDoListItem>();
+    public ArrayList<ToDoListItem> items = new ArrayList<ToDoListItem>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +52,11 @@ public class CreateList extends AppCompatActivity {
         setContentView(R.layout.activity_create_list);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("To-Do");
+        actionBar.setTitle("Create List");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        final ListView listView = findViewById(R.id.listView);
-        final TextAdapter adapter = new TextAdapter();
+        ListView listView = findViewById(R.id.listView);
+        TextAdapter adapter = new TextAdapter();
 
         adapter.setData(items);
         listView.setAdapter(adapter);
@@ -103,48 +104,17 @@ public class CreateList extends AppCompatActivity {
             }
         });
 
-        // Popup side menu
-        drawerLayout = findViewById(R.id.my_drawer_layout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        NavigationView navigationView = findViewById(R.id.create_list_nav);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Intent i;
-                switch (menuItem.getItemId()) {
-                    case R.id.nav_home:
-                        i = new Intent(context, Menu.class);
-                        startActivity(i);
-                        finish();
-                        break;
-                    case R.id.nav_planner:
-                        i = new Intent(context, PlannerMain.class);
-                        startActivity(i);
-                        finish();
-                        break;
-                    case R.id.nav_todo:
-                        i = new Intent(context, ToDoMain.class);
-                        startActivity(i);
-                        finish();
-                        break;
-                    case R.id.nav_rewards:
-                        i = new Intent(context, RewardsMain.class);
-                        startActivity(i);
-                        finish();
-                        break;
-                    case R.id.nav_settings:
-                        i = new Intent(context, Settings.class);
-                        startActivity(i);
-                        finish();
-                        break;
-                }
-                drawerLayout.closeDrawer(GravityCompat.START);
-                return true;
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    items.get(i).difficulty = ((SeekBar) findViewById(R.id.difficultyListBar)).getProgress() + 1;
+                    adapter.notifyDataSetChanged();
+                    return(true);
             }
         });
+//        for (int i = 0; i < items.size(); i++) {
+//            items.get(i).difficulty = ((SeekBar) findViewById(R.id.difficultyBar)).getProgress() + 1;
+//        }
     }
 
     @Override
@@ -171,6 +141,7 @@ public class CreateList extends AppCompatActivity {
 
     class TextAdapter extends BaseAdapter {
         public ArrayList<ToDoListItem> list = new ArrayList<ToDoListItem>();
+        //SeekBar seekbar = new SeekBar(CreateList.this);
 
         void setData(ArrayList<ToDoListItem> newList) {
             list.clear();
@@ -198,18 +169,18 @@ public class CreateList extends AppCompatActivity {
             LayoutInflater inflater = (LayoutInflater) CreateList.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View rowView = inflater.inflate(R.layout.listitem, viewGroup, false);
             TextView textView = rowView.findViewById(R.id.listItem);
-            textView.setText(list.get(position).toString());
+            textView.setText(list.get(position).itemName);
             return (rowView);
         }
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void createOnClick(View view) {
         ToDoList newList = new ToDoList();
         newList.userId = Login.userid;
-        newList.title = ((EditText) findViewById(R.id.eventTitle)).getText().toString();
+        newList.title = ((EditText) findViewById(R.id.listTitle)).getText().toString();
         newList.group = ((Spinner) findViewById(R.id.groupSpinner)).getSelectedItem().toString();
-        newList.listItem = ((TextView) findViewById(R.id.listItem)).getText().toString();
         newList.fromUser = Login.username;
         newList.toUser = ((EditText) findViewById(R.id.shareText)).getText().toString();
         newList.completed = 0;
@@ -251,7 +222,7 @@ class CreateToDoList extends AsyncTask<String, Void, Void> {
         String json = gson.toJson(list);
 
         apiResponse = (ApiResponse)ApiManagement.PostWithReturn("todolist/lists/add", json, new ApiResponse(), ApiResponse.class);
-        //Menu.toDoListArray = (ToDoListArray)ApiManagement.PostWithReturn("todolist/lists", json, new ToDoListArray(), ToDoListArray.class);
+        Menu.toDoListArray = (ToDoListArray)ApiManagement.PostWithReturn("todolist/lists", json, new ToDoListArray(), ToDoListArray.class);
 
         return (null);
     }

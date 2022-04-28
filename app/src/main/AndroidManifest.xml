@@ -21,6 +21,7 @@
         <activity android:name=".RewardsMain" />
         <activity android:name=".ToDoMain" />
         <activity android:name=".CreateList" />
+        <activity android:name=".UpdateList" />
         <activity android:name=".PlannerMain" />
         <activity android:name=".ForgotPassword" />
         <activity android:name=".CreateAccount" />

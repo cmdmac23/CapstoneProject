@@ -50,7 +50,6 @@ class ToDoList {
     public int userId;
     public String title;
     public String group;
-    public String listItem;
     public String fromUser;
     public String toUser;
     public int completed;
@@ -60,6 +59,7 @@ class ToDoList {
 class ToDoListItem {
     public int listItemId;
     public int listId;
+    public int userId;
     public String itemName;
     public int difficulty;
     public int completed;
