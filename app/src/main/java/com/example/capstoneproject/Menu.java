@@ -345,3 +345,18 @@ class UpdateCompletionStatus extends AsyncTask<String, Void, Void> {
         return  null;
     }
 }
+
+class UpdateListCompletionStatus extends AsyncTask<String, Void, Void> {
+    ToDoListItem updateItem;
+
+    UpdateListCompletionStatus(ToDoListItem update) {this.updateItem = update;}
+
+    protected Void doInBackground(String... urls) {
+        Gson gson = new Gson();
+        String json = gson.toJson(updateItem);
+
+        ApiManagement.PostNoReturn("todolist/lists/complete", json);
+
+        return null;
+    }
+}

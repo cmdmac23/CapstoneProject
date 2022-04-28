@@ -36,7 +36,7 @@
 
 
         <LinearLayout
-            android:id="@+id/difficultyLayout"
+            android:id="@+id/difficultyListLayout"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:orientation="horizontal">
@@ -47,7 +47,7 @@
                 android:layout_weight="1" />
 
             <TextView
-                android:id="@+id/textView10"
+                android:id="@+id/textView111"
                 android:layout_width="10dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -57,7 +57,7 @@
                 android:textSize="18sp" />
 
             <SeekBar
-                android:id="@+id/difficultyBar"
+                android:id="@+id/difficultyListBar"
                 style="@style/Widget.AppCompat.SeekBar.Discrete"
                 android:layout_width="101dp"
                 android:layout_height="match_parent"
