@@ -78,7 +78,7 @@ public class UnlockReward extends AppCompatActivity {
                 }
 
                 unlockButton.setText("Unlock for " + pointCost + " Points");
-                if (pointCost > Login.points){
+                if (!userHasEnoughPoints(pointCost)){
                     unlockButton.setBackgroundColor(Color.rgb(169, 169, 169));
                 }
                 else{
@@ -98,8 +98,15 @@ public class UnlockReward extends AppCompatActivity {
         return true;
     }
 
+    public static boolean userHasEnoughPoints(int cost){
+        if (cost < Login.points){
+            return true;
+        }
+        return false;
+    }
+
     public void unlockOnClick(View view){
-        if (pointCost > Login.points){
+        if (!userHasEnoughPoints(pointCost)){
             Login.popupMessage("You do not have enough points to unlock this item", this);
         }
         else{

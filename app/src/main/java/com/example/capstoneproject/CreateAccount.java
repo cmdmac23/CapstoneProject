@@ -49,7 +49,7 @@ public class CreateAccount extends AppCompatActivity {
         }
         // Make sure the two passwords entered are the same
         //      if not, error message
-        else if (!enteredPass.getText().toString().equals(enteredPass2.getText().toString())){
+        else if (!arePasswordsTheSame(enteredPass.getText().toString(), enteredPass2.getText().toString())){
             Login.popupMessage("The passwords you entered do not match", this);
             enteredPass.setText("");
             enteredPass2.setText("");
@@ -93,6 +93,13 @@ public class CreateAccount extends AppCompatActivity {
         Intent i = new Intent(this, Login.class);
         startActivity(i);
         return true;
+    }
+
+    public static boolean arePasswordsTheSame(String password1, String password2){
+        if (password1.equals(password2)){
+            return true;
+        }
+        return false;
     }
 }
 
