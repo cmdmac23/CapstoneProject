@@ -3,4 +3,9 @@
     <style name="SwitchStyle" parent="@style/TextAppearance.AppCompat">
         <item name="android:textColor">@color/darkest_green</item>
     </style>
+
+    <style name="SpinnerStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="android:textColor">@color/darkest_green</item>
+        <item name="android:textSize">22sp</item>
+    </style>
 </resources>

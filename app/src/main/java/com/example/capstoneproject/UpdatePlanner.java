@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -21,7 +23,9 @@ import android.widget.TimePicker;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
@@ -29,14 +33,18 @@ import androidx.work.WorkRequest;
 
 import com.google.gson.Gson;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-public class CreatePlanner extends AppCompatActivity {
-    public static Context context;
+public class UpdatePlanner extends AppCompatActivity {
+    public DrawerLayout drawerLayout;
+    public ActionBarDrawerToggle actionBarDrawerToggle;
+    public Context context = this;
+
     public Calendar defaultCalendar = Calendar.getInstance();
     public Calendar eventCalendar = Calendar.getInstance();
     public Calendar reminderCalendar = Calendar.getInstance();
@@ -53,14 +61,10 @@ public class CreatePlanner extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_planner);
 
-        context = this;
-
-        // Set top bar information
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Create Entry");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        // Get all of the buttons set for later use
         Switch locationSwitch = (Switch) findViewById(R.id.locationSwitch);
         LinearLayout locationLayout = (LinearLayout) findViewById(R.id.locationLayout);
         Switch reminderSwitch = (Switch) findViewById(R.id.reminderSwitch);
@@ -68,7 +72,9 @@ public class CreatePlanner extends AppCompatActivity {
         Switch shareSwitch = (Switch) findViewById(R.id.shareSwitch);
         LinearLayout shareLayout = (LinearLayout) findViewById(R.id.shareLayout);
 
-        // Get all of the date/time text boxes for later use
+        Button submit = (Button) findViewById(R.id.createEventButton);
+        submit.setText("Update");
+
         eventDate = (EditText) findViewById(R.id.eventDateText);
         reminderDate = (EditText) findViewById(R.id.reminderDateText);
         eventTime = (EditText) findViewById(R.id.eventTimeText);
@@ -88,19 +94,16 @@ public class CreatePlanner extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 lastClick = eventDate;
-                new DatePickerDialog(CreatePlanner.this, date, defaultCalendar.get(Calendar.YEAR), defaultCalendar.get(Calendar.MONTH), defaultCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                new DatePickerDialog(UpdatePlanner.this, date, defaultCalendar.get(Calendar.YEAR), defaultCalendar.get(Calendar.MONTH), defaultCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
         reminderDate.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 lastClick = reminderDate;
-                new DatePickerDialog(CreatePlanner.this, date, defaultCalendar.get(Calendar.YEAR), defaultCalendar.get(Calendar.MONTH), defaultCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                new DatePickerDialog(UpdatePlanner.this, date, defaultCalendar.get(Calendar.YEAR), defaultCalendar.get(Calendar.MONTH), defaultCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-
-        // Set a default date/time for all date/time blanks
-        setDefaultValues();
 
         // Time functions
         TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
@@ -115,14 +118,14 @@ public class CreatePlanner extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 lastClick = eventTime;
-                new TimePickerDialog(CreatePlanner.this, time, defaultCalendar.get(Calendar.HOUR_OF_DAY), defaultCalendar.get(Calendar.MINUTE), false).show();
+                new TimePickerDialog(UpdatePlanner.this, time, defaultCalendar.get(Calendar.HOUR_OF_DAY), defaultCalendar.get(Calendar.MINUTE), false).show();
             }
         });
         reminderTime.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 lastClick = reminderTime;
-                new TimePickerDialog(CreatePlanner.this, time, defaultCalendar.get(Calendar.HOUR_OF_DAY), defaultCalendar.get(Calendar.MINUTE), false).show();
+                new TimePickerDialog(UpdatePlanner.this, time, defaultCalendar.get(Calendar.HOUR_OF_DAY), defaultCalendar.get(Calendar.MINUTE), false).show();
             }
         });
 
@@ -147,6 +150,7 @@ public class CreatePlanner extends AppCompatActivity {
                     reminderLayout.setVisibility(View.GONE);
                     reminderSelected = false;
                 }
+
             }
         });
         shareSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -158,12 +162,58 @@ public class CreatePlanner extends AppCompatActivity {
                     shareLayout.setVisibility(View.GONE);
             }
         });
+
+        populateBlanks();
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    private void populateBlanks(){
+        PlannerEvent event = PlannerMain.selectedEntry;
+        String myFormat = "yyyy-MM-dd HH:mm:ss";
+        String df = "MM/dd/yy";
+        String tf = "hh:mm a";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
+        SimpleDateFormat dateFormatString = new SimpleDateFormat(df, Locale.US);
+        SimpleDateFormat timeFormatStrong = new SimpleDateFormat(tf, Locale.US);
+
+        ((EditText) findViewById(R.id.eventTitle)).setText(event.title);
+        ((EditText) findViewById(R.id.eventDescription)).setText(event.description);
+
+
+        Spinner spinner = ((Spinner) findViewById(R.id.groupSpinner));
+        if (event.group == "Personal")
+            spinner.setSelection(1);
+        if (event.group == "Other")
+            spinner.setSelection(2);
+
+        eventDate = (EditText) findViewById(R.id.eventDateText);
+        reminderDate = (EditText) findViewById(R.id.reminderDateText);
+        eventTime = (EditText) findViewById(R.id.eventTimeText);
+        reminderTime = (EditText) findViewById(R.id.reminderTimeText);
+
+        try {
+            eventCalendar.setTime(dateFormat.parse(event.dateTime));
+            eventDate.setText(dateFormatString.format(eventCalendar.getTime()));
+            eventTime.setText(timeFormatStrong.format(eventCalendar.getTime()));
+            if (!(event.reminder == null) && !event.reminder.isEmpty()){
+                reminderCalendar.setTime(dateFormat.parse(event.reminder));
+                reminderDate.setText(dateFormatString.format(reminderCalendar.getTime()));
+                reminderTime.setText(timeFormatStrong.format(reminderCalendar.getTime()));
+                ((Switch)findViewById(R.id.reminderSwitch)).setChecked(true);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        ((EditText) findViewById(R.id.locationText)).setText(event.location);
+
+        ((SeekBar) findViewById(R.id.difficultyBar)).setProgress(event.difficulty - 1);
+        ((EditText) findViewById(R.id.shareText)).setText(event.toUser);
     }
 
     private void setDefaultValues(){
@@ -195,6 +245,7 @@ public class CreatePlanner extends AppCompatActivity {
         SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
 
         PlannerEvent newEvent = new PlannerEvent();
+        newEvent.eventId = PlannerMain.selectedEntry.eventId;
         newEvent.userId = Login.userid;
         newEvent.title = ((EditText) findViewById(R.id.eventTitle)).getText().toString();
         newEvent.description = ((EditText) findViewById(R.id.eventDescription)).getText().toString();
@@ -204,9 +255,6 @@ public class CreatePlanner extends AppCompatActivity {
 
         if (reminderSelected){
             newEvent.reminder = dateFormat.format(reminderCalendar.getTime());
-            defaultCalendar = Calendar.getInstance();
-            reminderCalendar.set(Calendar.MILLISECOND, 0);
-            // Schedule the notification
             long delay = Duration.between(defaultCalendar.toInstant(), reminderCalendar.toInstant()).toMillis();
             WorkRequest uploadWorkRequest = new OneTimeWorkRequest.Builder(UploadWorker.class)
                     .setInitialDelay(delay, TimeUnit.MILLISECONDS)
@@ -230,12 +278,13 @@ public class CreatePlanner extends AppCompatActivity {
             Login.popupMessage("Please enter a title", this);
         }
         else{
-            new CreatePlannerEntry(this, this, view, newEvent).execute();
+            Log.e("Update?", newEvent.title);
+            new UpdatePlannerEntry(this, this, view, newEvent).execute();
         }
     }
 }
 
-class CreatePlannerEntry extends AsyncTask<String, Void, Void> {
+class UpdatePlannerEntry extends AsyncTask<String, Void, Void> {
     Context context;
     Activity activity;
     View view;
@@ -243,7 +292,7 @@ class CreatePlannerEntry extends AsyncTask<String, Void, Void> {
     ApiResponse apiResponse = null;
     ProgressDialog progress;
 
-    CreatePlannerEntry(Context ctx, Activity act, View vw, PlannerEvent event) {
+    UpdatePlannerEntry(Context ctx, Activity act, View vw, PlannerEvent event) {
         this.context = ctx;
         this.activity = act;
         this.view = vw;
@@ -253,7 +302,7 @@ class CreatePlannerEntry extends AsyncTask<String, Void, Void> {
     @Override
     protected void onPreExecute(){
         progress = new ProgressDialog(context);
-        progress.setMessage("Creating Entry...");
+        progress.setMessage("Updating Entry...");
         progress.setIndeterminate(true);
         progress.show();
     }
@@ -262,7 +311,8 @@ class CreatePlannerEntry extends AsyncTask<String, Void, Void> {
         Gson gson = new Gson();
         String json = gson.toJson(event);
 
-        apiResponse = (ApiResponse)ApiManagement.PostWithReturn("planner/entries/add", json, new ApiResponse(), ApiResponse.class);
+        //apiResponse = (ApiResponse)ApiManagement.PostWithReturn("planner/entries/update", json, new ApiResponse(), ApiResponse.class);
+        ApiManagement.PostNoReturn("planner/entries/update", json);
         Menu.plannerEntryArray = (PlannerEventArray)ApiManagement.PostWithReturn("planner/entries", json, new PlannerEventArray(), PlannerEventArray.class);
 
         return  null;

@@ -1,24 +1,22 @@
 package com.example.capstoneproject;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.gson.Gson;
 
 public class ForgotPassword extends AppCompatActivity {
+    public static String email = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,27 +31,15 @@ public class ForgotPassword extends AppCompatActivity {
         EditText enteredEmail = findViewById(R.id.forgotEmail);
 
         if (enteredEmail.getText().toString().isEmpty()){
-            popupMessage("Please enter your email address", this);
+            Login.popupMessage("Please enter your email address", this);
         }
         else{
+            email = enteredEmail.getText().toString();
             UserLogin user = new UserLogin();
             user.email = enteredEmail.getText().toString();
 
             new ForgotPasswordAction(this, this, view, user).execute();
         }
-    }
-
-    public static void popupMessage(String message, Context context){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder.setMessage(message);
-        alertDialogBuilder.setNegativeButton("ok", new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
     }
 
     public boolean onOptionsItemSelected(MenuItem item){

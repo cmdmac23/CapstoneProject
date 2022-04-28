@@ -1,8 +1,5 @@
 package com.example.capstoneproject;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -15,7 +12,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import java.util.concurrent.TimeUnit;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 
@@ -31,25 +30,31 @@ public class CreateAccount extends AppCompatActivity {
     }
 
     public void createAccountClick(View view){
+        // Get all of the text blanks for getting/setting
         EditText enteredEmail = findViewById(R.id.createEmail);
         EditText enteredUser = findViewById(R.id.createUsername);
         EditText enteredPass = findViewById(R.id.createPassword);
         EditText enteredPass2 = findViewById(R.id.createPasswordVerify);
 
+        // Making sure all required blanks are filled out by user
+        //      if not, show error message
         if(enteredEmail.getText().toString().isEmpty())
-            popupMessage("Please enter an email address", this);
+            Login.popupMessage("Please enter an email address", this);
         else if(enteredUser.getText().toString().isEmpty())
-            popupMessage("Please enter a username", this);
+            Login.popupMessage("Please enter a username", this);
         else if (enteredPass.getText().toString().isEmpty() || enteredPass2.getText().toString().isEmpty()){
-            popupMessage("Please enter a password", this);
+            Login.popupMessage("Please enter a password", this);
             enteredPass.setText("");
             enteredPass2.setText("");
         }
+        // Make sure the two passwords entered are the same
+        //      if not, error message
         else if (!enteredPass.getText().toString().equals(enteredPass2.getText().toString())){
-            popupMessage("The passwords you entered do not match", this);
+            Login.popupMessage("The passwords you entered do not match", this);
             enteredPass.setText("");
             enteredPass2.setText("");
         }
+        // Attempt to create account after doing some preliminary string management on all text boxes
         else{
             String email = enteredEmail.getText().toString().toLowerCase().trim();
             String username = enteredUser.getText().toString().toLowerCase().trim();
@@ -62,24 +67,12 @@ public class CreateAccount extends AppCompatActivity {
 
             new AccountCreation(this, this, view, user).execute();
 
+            // Clear all blanks in case there is an error during creation, the user is prompted again with an empty scene
             enteredEmail.setText("");
             enteredUser.setText("");
             enteredPass.setText("");
             enteredPass2.setText("");
         }
-    }
-
-    public static void popupMessage(String message, Context context){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder.setMessage(message);
-        alertDialogBuilder.setNegativeButton("ok", new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
     }
 
     public static void popupMessageNewScene(String message, Context context){
@@ -132,7 +125,6 @@ class AccountCreation extends AsyncTask<String, Void, Void> {
         Log.e("JSON", json);
 
         apiResponse = (ApiResponse)ApiManagement.PostWithReturn("createuser", json, new ApiResponse(), ApiResponse.class);
-        //Log.e("CREATE RESP", apiResponse.text);
         return  null;
     }
 
