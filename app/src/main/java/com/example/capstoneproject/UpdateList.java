@@ -56,6 +56,7 @@ public class UpdateList extends AppCompatActivity {
     public Context context = this;
     public ArrayList<ToDoListItem> editItems = new ArrayList<ToDoListItem>();
 
+    //nearly identical to CreateList.java
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,30 +67,49 @@ public class UpdateList extends AppCompatActivity {
         actionBar.setTitle("Create List");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        //create and initialize list view variable and adapter
         ListView listView = findViewById(R.id.listView);
         UpdateList.TextAdapter adapter = new UpdateList.TextAdapter();
 
+        //sends existing items list to adapter to edit
         adapter.setData(editItems);
         listView.setAdapter(adapter);
 
+        //prompts user to add a new item to their list
         final Button newTaskButton = findViewById(R.id.newTaskButton);
-
         newTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //creates a pop-up dialog that asks the user to input an item
                 EditText taskInput = new EditText(UpdateList.this);
                 taskInput.setSingleLine();
                 androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(UpdateList.this)
-                        .setTitle("Add a New Task")
-                        .setMessage("What is your new task?")
+                        .setTitle("Add a New Item")
                         .setView(taskInput)
-                        .setPositiveButton("Add task", new DialogInterface.OnClickListener() {
+                        .setNeutralButton("Add Item", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                //creates new to-do list item
                                 ToDoListItem item = new ToDoListItem();
                                 item.itemName = taskInput.getText().toString();
-                                item.difficulty = 2;
                                 item.completed = 0;
+                                dialogInterface.dismiss();
+                                //creates a second pop-up that prompts user to select a difficulty for their list item
+                                SeekBar seekBar = new SeekBar(UpdateList.this);
+                                seekBar.setMax(4);
+                                seekBar.setProgress(2);
+                                androidx.appcompat.app.AlertDialog difDialog = new androidx.appcompat.app.AlertDialog.Builder(UpdateList.this)
+                                        .setTitle("Difficulty")
+                                        .setView(seekBar)
+                                        .setPositiveButton("Add Difficulty", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                item.difficulty = seekBar.getProgress() + 1;
+                                            }
+                                        })
+                                        .setNegativeButton("Cancel", null)
+                                        .create();
+                                difDialog.show();
                                 editItems.add(item);
                                 adapter.setData(editItems);
                             }
@@ -102,40 +122,42 @@ public class UpdateList extends AppCompatActivity {
 
         context = this;
 
-        System.out.println(ToDoMain.selectedList.listItemArray.length);
+        //populates existing to-do list items on screen for user to see what they've already input
         for (int i = 0; i < ToDoMain.selectedList.listItemArray.length; i++) {
             editItems.add(ToDoMain.selectedList.listItemArray[i]);
         }
         adapter.setData(editItems);
         listView.setAdapter(adapter);
 
-
-        Switch shareSwitch = (Switch) findViewById(R.id.shareListSwitch);
-        LinearLayout shareLayout = (LinearLayout) findViewById(R.id.shareListLayout);
+        //share switch on interface (prompts user to enter a username to share to-do list if switched)
+        Switch shareListSwitch = (Switch) findViewById(R.id.shareListSwitch);
+        LinearLayout shareListLayout = (LinearLayout) findViewById(R.id.shareListLayout);
 
         Button submit = (Button) findViewById(R.id.createListButton);
         submit.setText("Update");
 
-        shareSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        shareListSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b)
-                    shareLayout.setVisibility(View.VISIBLE);
+                    shareListLayout.setVisibility(View.VISIBLE);
                 else
-                    shareLayout.setVisibility(View.GONE);
+                    shareListLayout.setVisibility(View.GONE);
             }
         });
 
+        //populates existing fields (list title, group, shared to user)
         populateBlanks();
     }
 
-
+    //user can exit update list page by hitting "back" arrow
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
 
+    //populates existing fields (list title, group, shared to user)
     private void populateBlanks(){
         ToDoList list = ToDoMain.selectedList;
 
@@ -147,7 +169,7 @@ public class UpdateList extends AppCompatActivity {
         if (list.group == "Other")
             spinner.setSelection(2);
 
-        ((EditText) findViewById(R.id.shareText)).setText(list.toUser);
+        ((EditText) findViewById(R.id.shareListText)).setText(list.toUser);
 
     }
 
@@ -165,31 +187,36 @@ public class UpdateList extends AppCompatActivity {
         alertDialog.show();
     }
 
+    //adapter to display list items
     class TextAdapter extends BaseAdapter {
         public ArrayList<ToDoListItem> list = new ArrayList<ToDoListItem>();
-        //SeekBar seekbar = new SeekBar(CreateList.this);
 
+        //called in first lines, but clears lists then adds items in "items" list to adapter
         void setData(ArrayList<ToDoListItem> newList) {
             //list.clear();
             list.addAll(newList);
             notifyDataSetChanged();
         }
 
+        //total size of items list
         @Override
         public int getCount() {
             return list.size();
         }
 
+        //gets item in list
         @Override
         public Object getItem(int position) {
             return null;
         }
 
+        //gets item ID in list
         @Override
         public long getItemId(int position) {
             return 0;
         }
 
+        //displays list items
         @Override
         public View getView(int position, View view, ViewGroup viewGroup) {
             LayoutInflater inflater = (LayoutInflater) UpdateList.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -201,7 +228,7 @@ public class UpdateList extends AppCompatActivity {
 
     }
 
-
+    //API function call, pulls values input by user to send to database
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void createOnClick (View view){
         ToDoList newList = new ToDoList();
@@ -210,7 +237,7 @@ public class UpdateList extends AppCompatActivity {
         newList.title = ((EditText) findViewById(R.id.listTitle)).getText().toString();
         newList.group = ((Spinner) findViewById(R.id.groupListSpinner)).getSelectedItem().toString();
         newList.fromUser = Login.username;
-        newList.toUser = ((EditText) findViewById(R.id.shareText)).getText().toString();
+        newList.toUser = ((EditText) findViewById(R.id.shareListText)).getText().toString();
         newList.completed = 0;
         newList.listItemArray = editItems.toArray(new ToDoListItem[editItems.size()]);
 
@@ -224,6 +251,7 @@ public class UpdateList extends AppCompatActivity {
     }
 }
 
+//sends updated list input from user to the endpoint "todolists/lists/update" so list is updated in database
 class UpdateToDoList extends AsyncTask<String, Void, Void> {
     Context context;
     Activity activity;

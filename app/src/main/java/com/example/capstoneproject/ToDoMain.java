@@ -45,10 +45,11 @@ public class ToDoMain extends AppCompatActivity {
         actionBar.setTitle("To-Do");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        //initializes main layout for to-do list main page
         mainListLayout = (LinearLayout) findViewById(R.id.listMainLinearLayout);
         mainListLayout.removeAllViews();
 
-        //System.out.println(Menu.toDoListArray.listArray.length);
+        //function call to populate the screen
         populateScreen(mainListLayout);
 
         // Popup side menu
@@ -95,6 +96,7 @@ public class ToDoMain extends AppCompatActivity {
         });
     }
 
+    //user clicks "Add New" button on to-do main page, create list class opens
     public void CreateClick(View view) {
         Intent intent = new Intent(this, CreateList.class);
         startActivity(intent);
@@ -108,6 +110,7 @@ public class ToDoMain extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //populates screen with existing user lists
     public void populateScreen(View view) {
         int length = Menu.toDoListArray.listArray.length;
         for (int i = 0; i < length; i++) {
@@ -118,14 +121,19 @@ public class ToDoMain extends AppCompatActivity {
         }
     }
 
+    //pulls existing user lists from endpoint "todolist/lists" onto screen
     public static void getListMainLayout(Context ctx, View view, ToDoList list, int index) {
+        //populates to-do list items
         LinearLayout subLayout = getListSubLayout(ctx, list, index);
         subLayout.setVisibility(View.GONE);
 
+        //first linear layout
+        //populates existing user list titles and selected group
         LinearLayout row = new LinearLayout(ctx);
         row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         row.setOrientation(LinearLayout.HORIZONTAL);
         row.isClickable();
+        //user can click list title to open full to-do list
         row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -138,6 +146,7 @@ public class ToDoMain extends AppCompatActivity {
         });
         row.setBackgroundColor(Color.rgb(122, 159, 90));
 
+        //existing list titles
         TextView titleText = new TextView(ctx);
         titleText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
         titleText.setWidth(665);
@@ -146,13 +155,13 @@ public class ToDoMain extends AppCompatActivity {
         titleText.setTextSize(20);
         titleText.setPadding(15, 0, 0, 0);
 
+        //existing list group
         TextView groupText = new TextView(ctx);
         groupText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1));
         groupText.setText(list.group);
         groupText.setTextColor(ContextCompat.getColor(ctx, R.color.white));
         groupText.setTextSize(14);
         groupText.setWidth(200);
-
 
         row.addView(titleText);
         row.addView(groupText);
@@ -166,25 +175,28 @@ public class ToDoMain extends AppCompatActivity {
         listLine.setBackgroundColor(ContextCompat.getColor(ctx, R.color.darkest_green));
         ((LinearLayout.LayoutParams)listLine.getLayoutParams()).gravity = Gravity.CENTER_HORIZONTAL;
 
-
         mainListLayout.addView(row);
         mainListLayout.addView(listSpace);
         mainListLayout.addView(subLayout);
     }
 
     public static LinearLayout getListSubLayout(Context ctx, ToDoList list, int index) {
+        //second linear layout
+        //populates existing user to-do list items, difficulties, and check boxes for users to complete items
         LinearLayout menu = new LinearLayout(ctx);
         menu.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         menu.setOrientation(LinearLayout.VERTICAL);
-        //menu.setId(2000000 + entry.eventId);
         menu.setBackgroundColor(ContextCompat.getColor(ctx, R.color.white));
 
+        //third linear layout
+        //creates columns for to-do list items, difficulties, and check boxes to distinguish between lists
         LinearLayout labelItems = new LinearLayout(ctx);
         labelItems.getHeight();
         labelItems.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         labelItems.setBackgroundColor(ContextCompat.getColor(ctx, R.color.submenu_green));
         labelItems.setOrientation(LinearLayout.HORIZONTAL);
 
+        //Items column text view
         TextView itemView = new TextView(ctx);
         itemView.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 7));
         itemView.setPadding(5, 0, 0, 0);
@@ -194,6 +206,7 @@ public class ToDoMain extends AppCompatActivity {
         itemView.setPadding(15, 0, 0, 0);
         labelItems.addView(itemView);
 
+        //Difficulty column text view
         TextView difView = new TextView(ctx);
         difView.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 4));
         difView.setText("Difficulty");
@@ -201,6 +214,7 @@ public class ToDoMain extends AppCompatActivity {
         difView.setWidth(450);
         labelItems.addView(difView);
 
+        //Checbox column view
         CheckBox fakeCheck = new CheckBox(ctx);
         fakeCheck.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
         fakeCheck.setText("");
@@ -217,30 +231,34 @@ public class ToDoMain extends AppCompatActivity {
         menu.addView(labelItems);
         menu.addView(dividerLine);
 
+        // for each item in ToDoListItem[] (an array of items in a to-do list)
         int length = list.listItemArray.length;
         for (int i = 0; i < length; i++) {
 
+            //fourth linear layout
+            //displays existing user list items, difficulties for each item selected by user, and check boxes for users to complete items
             LinearLayout groupItems = new LinearLayout(ctx);
             groupItems.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
             groupItems.setOrientation(LinearLayout.HORIZONTAL);
 
+            //displays list item
             TextView listItemText = new TextView(ctx);
             listItemText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 7));
             listItemText.setText(list.listItemArray[i].itemName);
             listItemText.setTextSize(18);
             listItemText.setWidth(665);
             listItemText.setPadding(15, 0, 0, 0);
-            //menu.addView(listItemText);
             groupItems.addView(listItemText);
 
+            //displays selected difficulty
             TextView difficultyText = new TextView(ctx);
             difficultyText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1));
             difficultyText.setText("" + list.listItemArray[i].difficulty);
             difficultyText.setWidth(320);
             listItemText.setPadding(15, 0, 0, 0);
-            //menu.addView(difficultyText);
             groupItems.addView(difficultyText);
 
+            //displays check box
             CheckBox checbox = new CheckBox(ctx);
             checbox.setText("");
             checbox.setHeight(50);
@@ -253,10 +271,10 @@ public class ToDoMain extends AppCompatActivity {
             checbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    //if a user checks the check box of an item, function is called to add points
                     onCheckBoxChecked(buttonView.getId(), isChecked, finalI);
                 }
             });
-            //menu.addView(checbox);
             groupItems.addView(checbox);
 
             menu.addView(groupItems);
@@ -267,6 +285,7 @@ public class ToDoMain extends AppCompatActivity {
             menu.addView(line);
         }
 
+        //displays name of user list is shared to
         if (!list.toUser.isEmpty() && !list.toUser.equals(Login.username)) {
             TextView sharedText = new TextView(ctx);
             sharedText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
@@ -275,6 +294,8 @@ public class ToDoMain extends AppCompatActivity {
 
             menu.addView(sharedText);
         }
+
+        //displays name of user list is shared from
         if (!list.fromUser.isEmpty() && list.toUser.equals(Login.username)) {
             TextView sharedText = new TextView(ctx);
             sharedText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
@@ -284,6 +305,7 @@ public class ToDoMain extends AppCompatActivity {
             menu.addView(sharedText);
         }
 
+        //edit button that allows users to edit any of their existing to-do list entries
         if (!list.toUser.equals(Login.username)) {
             TextView editText = new TextView(ctx);
             editText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
@@ -306,9 +328,10 @@ public class ToDoMain extends AppCompatActivity {
         return (menu);
     }
 
+    //if user checks check box (indicating they completed a list item), points are rewarded
+    //to them for completing the item based off of the difficulty they ranked the item
     public static void onCheckBoxChecked(int index, boolean isChecked, int indexsub) {
         index = index - 9000000;
-        //for (int item = 0; item < Menu.toDoListArray.listArray[index].listItemArray.length; item++) {
         ToDoListItem updateStatus = new ToDoListItem();
         updateStatus.listItemId = Menu.toDoListArray.listArray[index].listItemArray[indexsub].listItemId;
         updateStatus.userId = Login.userid;
