@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -32,6 +33,7 @@ public class ToDoMain extends AppCompatActivity {
     public Context context = this;
     public static LinearLayout mainListLayout;
     public static ToDoList selectedList;
+    public static ToDoListItem selectedItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,7 @@ public class ToDoMain extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Intent i;
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.nav_home:
                         i = new Intent(context, Menu.class);
                         startActivity(i);
@@ -92,15 +94,15 @@ public class ToDoMain extends AppCompatActivity {
         });
     }
 
-    public void CreateClick (View view){
+    public void CreateClick(View view) {
         Intent intent = new Intent(this, CreateList.class);
         startActivity(intent);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (actionBarDrawerToggle.onOptionsItemSelected(item)){
-            return  true;
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -128,8 +130,7 @@ public class ToDoMain extends AppCompatActivity {
             public void onClick(View view) {
                 if (subLayout.getVisibility() == View.GONE) {
                     subLayout.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     subLayout.setVisibility(View.GONE);
                 }
             }
@@ -141,9 +142,14 @@ public class ToDoMain extends AppCompatActivity {
         titleText.setWidth(665);
         titleText.setText(list.title);
         titleText.setTextSize(18);
-        titleText.setPadding(15,0,0,0);
+        titleText.setPadding(15, 0, 0, 0);
+
+        TextView groupText = new TextView(ctx);
+        groupText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1));
+        groupText.setText(list.group);
 
         row.addView(titleText);
+        row.addView(groupText);
 
         mainListLayout.addView(row);
         mainListLayout.addView(subLayout);
@@ -156,30 +162,27 @@ public class ToDoMain extends AppCompatActivity {
         //menu.setId(2000000 + entry.eventId);
         menu.setBackgroundColor(ContextCompat.getColor(ctx, R.color.submenu_green));
 
-        LinearLayout groupDifficult = new LinearLayout(ctx);
-        groupDifficult.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        groupDifficult.setOrientation(LinearLayout.HORIZONTAL);
-
-        TextView groupText = new TextView(ctx);
-        groupText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1));
-        groupText.setText("Group: " + list.group);
-        groupText.setPadding(50, 0, 0, 0);
-
-        groupDifficult.addView(groupText);
-
         int length = list.listItemArray.length;
         for (int i = 0; i < length; i++) {
+
+            LinearLayout groupItems = new LinearLayout(ctx);
+            groupItems.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+            groupItems.setOrientation(LinearLayout.HORIZONTAL);
+
             TextView listItemText = new TextView(ctx);
             listItemText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
             listItemText.setText(list.listItemArray[i].itemName);
             listItemText.setTextSize(18);
-            listItemText.setPadding(50, 0, 0, 0);
-            menu.addView(listItemText);
+            listItemText.setWidth(665);
+            //menu.addView(listItemText);
+            groupItems.addView(listItemText);
 
             TextView difficultyText = new TextView(ctx);
             difficultyText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1));
             difficultyText.setText("Difficulty: " + list.listItemArray[i].difficulty);
-            menu.addView(difficultyText);
+            difficultyText.setWidth(320);
+            //menu.addView(difficultyText);
+            groupItems.addView(difficultyText);
 
             CheckBox checbox = new CheckBox(ctx);
             checbox.setText("");
@@ -189,43 +192,52 @@ public class ToDoMain extends AppCompatActivity {
             if (list.listItemArray[i].completed == 1) {
                 checbox.setChecked(true);
             }
+            int finalI = i;
             checbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-                    onCheckBoxChecked(buttonView.getId(), isChecked);
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    onCheckBoxChecked(buttonView.getId(), isChecked, finalI);
                 }
             });
-            menu.addView(checbox);
+            //menu.addView(checbox);
+            groupItems.addView(checbox);
+
+            menu.addView(groupItems);
+            View line = new View(ctx);
+            line.setLayoutParams(new LinearLayout.LayoutParams(1200, 2));
+            line.setBackgroundColor(Color.rgb(85, 133, 43));
+            ((LinearLayout.LayoutParams)line.getLayoutParams()).gravity = Gravity.CENTER_HORIZONTAL;
+            menu.addView(line);
         }
 
-        if(!list.toUser.isEmpty() && !list.toUser.equals(Login.username)){
+        if (!list.toUser.isEmpty() && !list.toUser.equals(Login.username)) {
             TextView sharedText = new TextView(ctx);
             sharedText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
             sharedText.setText("Shared With: " + list.toUser);
-            sharedText.setPadding(50,0,0,0);
+            sharedText.setPadding(50, 0, 0, 0);
 
             menu.addView(sharedText);
         }
-        if(!list.fromUser.isEmpty() && list.toUser.equals(Login.username)){
+        if (!list.fromUser.isEmpty() && list.toUser.equals(Login.username)) {
             TextView sharedText = new TextView(ctx);
             sharedText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
             sharedText.setText("Shared From: " + list.toUser);
-            sharedText.setPadding(50,0,0,0);
+            sharedText.setPadding(50, 0, 0, 0);
 
             menu.addView(sharedText);
         }
 
-        if (!list.toUser.equals(Login.username)){
+        if (!list.toUser.equals(Login.username)) {
             TextView editText = new TextView(ctx);
             editText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
             editText.setTextSize(18);
             editText.setText("EDIT");
-            editText.setPadding(0,0,50,0);
+            editText.setPadding(0, 0, 50, 0);
             editText.setGravity(Gravity.RIGHT);
             editText.isClickable();
-            editText.setOnClickListener(new View.OnClickListener(){
+            editText.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v){
+                public void onClick(View v) {
                     selectedList = list;
                     Intent i = new Intent(ctx, UpdateList.class);
                     ctx.startActivity(i);
@@ -237,22 +249,22 @@ public class ToDoMain extends AppCompatActivity {
         return (menu);
     }
 
-    public static void onCheckBoxChecked(int index, boolean isChecked) {
+    public static void onCheckBoxChecked(int index, boolean isChecked, int indexsub) {
         index = index - 9000000;
+        //for (int item = 0; item < Menu.toDoListArray.listArray[index].listItemArray.length; item++) {
         ToDoListItem updateStatus = new ToDoListItem();
-        updateStatus.listItemId = Menu.toDoListArray.listArray[index].listItemArray[index].listItemId;
+        updateStatus.listItemId = Menu.toDoListArray.listArray[index].listItemArray[indexsub].listItemId;
         updateStatus.userId = Login.userid;
 
-        int difficulty = updateStatus.difficulty;
+        int difficulty = updateStatus.difficulty = Menu.toDoListArray.listArray[index].listItemArray[indexsub].difficulty;
 
         if (isChecked) {
             updateStatus.completed = 1;
-            Menu.toDoListArray.listArray[index].listItemArray[index].completed = 1;
+            Menu.toDoListArray.listArray[index].listItemArray[indexsub].completed = 1;
             Login.points = Login.points + difficulty;
-        }
-        else {
+        } else {
             updateStatus.completed = 0;
-            Menu.toDoListArray.listArray[index].listItemArray[index].completed = 0;
+            Menu.toDoListArray.listArray[index].listItemArray[indexsub].completed = 0;
             Login.points = Login.points + difficulty;
 
         }
@@ -260,6 +272,6 @@ public class ToDoMain extends AppCompatActivity {
         updateStatus.difficulty = Login.points;
 
         new UpdateListCompletionStatus(updateStatus).execute();
-
+        //}
     }
 }

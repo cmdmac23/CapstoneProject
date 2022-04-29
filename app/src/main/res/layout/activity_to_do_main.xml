@@ -64,12 +64,21 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/textView115"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
                 android:paddingLeft="5dp"
                 android:text="To-Do Lists"
+                android:textColor="@color/lightest_green"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textView116"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text="Group"
                 android:textColor="@color/lightest_green"
                 android:textSize="18sp" />
 
