@@ -37,8 +37,10 @@ public class Menu extends AppCompatActivity {
     public static Context context;
     public static LinearLayout linearLayout;
     public static PlannerEventArray plannerEntryArray;
+    public static ToDoListArray toDoListArray;
     public static RewardArray rewardArray;
     public static TextView pointsText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class Menu extends AppCompatActivity {
         context = this;
         linearLayout = (LinearLayout) findViewById(R.id.menuMainLinearLayout);
         new PreloadPlannerEntries(this, this).execute();
+        new PreloadToDoLists(this, this).execute();
         new PreloadRewards(this, this).execute();
 
         pointsText = (TextView) findViewById(R.id.menuPointsText);
@@ -250,6 +253,46 @@ class PreloadPlannerEntries extends AsyncTask<String, Void, Void> {
     }
 }
 
+class PreloadToDoLists extends AsyncTask<String, Void, Void> {
+    Context context;
+    Activity activity;
+    //View view;
+    ToDoListArray apiResponse = null;
+    ProgressDialog progress;
+
+    PreloadToDoLists(Context ctx, Activity act) {
+        this.context = ctx;
+        this.activity = act;
+        //this.view = vw;
+    }
+
+    protected Void doInBackground(String... urls){
+        ToDoList input = new ToDoList();
+        input.userId = Login.userid;
+
+        Gson gson = new Gson();
+        String json = gson.toJson(input);
+
+        apiResponse = (ToDoListArray) ApiManagement.PostWithReturn("todolist/lists", json, new ToDoListArray(), ToDoListArray.class);
+        return  null;
+    }
+
+    @Override
+    protected void onPostExecute(Void temp){
+        //progress.hide();
+        if (apiResponse == null){
+            Log.e("TESTING ENTRY", "Response was null");
+        }
+        else if (apiResponse.listArray == null){
+            Log.e("ENTRY ARRAY", ".eventArray was null");
+        }
+        else{
+            Menu.toDoListArray = apiResponse;
+            //Menu.populateScreen(null, context);
+        }
+    }
+}
+
 class PreloadRewards extends AsyncTask<String, Void, Void> {
     Context context;
     Activity activity;
@@ -300,5 +343,20 @@ class UpdateCompletionStatus extends AsyncTask<String, Void, Void> {
         ApiManagement.PostNoReturn("planner/entries/complete", json);
         //ApiManagement.PostWithReturn("planner/entries", json, new PlannerEventArray(), PlannerEventArray.class);
         return  null;
+    }
+}
+
+class UpdateListCompletionStatus extends AsyncTask<String, Void, Void> {
+    ToDoListItem updateItem;
+
+    UpdateListCompletionStatus(ToDoListItem update) {this.updateItem = update;}
+
+    protected Void doInBackground(String... urls) {
+        Gson gson = new Gson();
+        String json = gson.toJson(updateItem);
+
+        ApiManagement.PostNoReturn("todolist/lists/complete", json);
+
+        return null;
     }
 }

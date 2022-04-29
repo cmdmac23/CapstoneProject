@@ -45,6 +45,30 @@ class PlannerEventArray{
     public PlannerEvent[] entryArray;
 }
 
+class ToDoList {
+    public int listId;
+    public int userId;
+    public String title;
+    public String group;
+    public String fromUser;
+    public String toUser;
+    public int completed;
+    public ToDoListItem[] listItemArray;
+}
+
+class ToDoListItem {
+    public int listItemId;
+    public int listId;
+    public int userId;
+    public String itemName;
+    public int difficulty;
+    public int completed;
+}
+
+class ToDoListArray {
+    public ToDoList[] listArray;
+}
+
 class RewardItem{
     public int userId;
     public int plantId;

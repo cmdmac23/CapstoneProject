@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.ConsoleMessage;
 import android.widget.CalendarView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -120,6 +121,7 @@ public class PlannerMain extends AppCompatActivity {
 
     public void populateScreen(View view, Date selectedDate){
         int length = Menu.plannerEntryArray.entryArray.length;
+        System.out.println(length);
         SimpleDateFormat readingFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date entryDate = new Date();
 
