@@ -72,13 +72,28 @@ public class CreateList extends AppCompatActivity {
                         .setTitle("Add a New Task")
                         .setMessage("What is your new task?")
                         .setView(taskInput)
-                        .setPositiveButton("Add task", new DialogInterface.OnClickListener() {
+                        .setNeutralButton("Add task", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 ToDoListItem item = new ToDoListItem();
                                 item.itemName = taskInput.getText().toString();
-                                item.difficulty = 2;
                                 item.completed = 0;
+                                dialogInterface.dismiss();
+                                SeekBar seekBar = new SeekBar(CreateList.this);
+                                seekBar.setMax(4);
+                                seekBar.setProgress(2);
+                                AlertDialog difDialog = new AlertDialog.Builder(CreateList.this)
+                                        .setTitle("Difficulty")
+                                        .setView(seekBar)
+                                        .setPositiveButton("Add Difficulty", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                item.difficulty = seekBar.getProgress() + 1;
+                                            }
+                                        })
+                                        .setNegativeButton("Cancel", null)
+                                        .create();
+                                difDialog.show();
                                 items.add(item);
                                 adapter.setData(items);
                             }
@@ -112,9 +127,6 @@ public class CreateList extends AppCompatActivity {
                     return(true);
             }
         });
-//        for (int i = 0; i < items.size(); i++) {
-//            items.get(i).difficulty = ((SeekBar) findViewById(R.id.difficultyBar)).getProgress() + 1;
-//        }
     }
 
     @Override
@@ -180,7 +192,7 @@ public class CreateList extends AppCompatActivity {
         ToDoList newList = new ToDoList();
         newList.userId = Login.userid;
         newList.title = ((EditText) findViewById(R.id.listTitle)).getText().toString();
-        newList.group = ((Spinner) findViewById(R.id.groupSpinner)).getSelectedItem().toString();
+        newList.group = ((Spinner) findViewById(R.id.groupListSpinner)).getSelectedItem().toString();
         newList.fromUser = Login.username;
         newList.toUser = ((EditText) findViewById(R.id.shareText)).getText().toString();
         newList.completed = 0;

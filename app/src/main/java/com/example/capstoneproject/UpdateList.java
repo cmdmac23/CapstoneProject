@@ -102,6 +102,14 @@ public class UpdateList extends AppCompatActivity {
 
         context = this;
 
+        System.out.println(ToDoMain.selectedList.listItemArray.length);
+        for (int i = 0; i < ToDoMain.selectedList.listItemArray.length; i++) {
+            editItems.add(ToDoMain.selectedList.listItemArray[i]);
+        }
+        adapter.setData(editItems);
+        listView.setAdapter(adapter);
+
+
         Switch shareSwitch = (Switch) findViewById(R.id.shareListSwitch);
         LinearLayout shareLayout = (LinearLayout) findViewById(R.id.shareListLayout);
 
@@ -140,13 +148,14 @@ public class UpdateList extends AppCompatActivity {
 
         ((EditText) findViewById(R.id.listTitle)).setText(list.title);
 
-        Spinner spinner = ((Spinner) findViewById(R.id.groupSpinner));
+        Spinner spinner = ((Spinner) findViewById(R.id.groupListSpinner));
         if (list.group == "Personal")
             spinner.setSelection(1);
         if (list.group == "Other")
             spinner.setSelection(2);
 
         ((EditText) findViewById(R.id.shareText)).setText(list.toUser);
+
     }
 
     public static void popupMessage(String message, Context context){
@@ -168,7 +177,7 @@ public class UpdateList extends AppCompatActivity {
         //SeekBar seekbar = new SeekBar(CreateList.this);
 
         void setData(ArrayList<ToDoListItem> newList) {
-            list.clear();
+            //list.clear();
             list.addAll(newList);
             notifyDataSetChanged();
         }
@@ -199,12 +208,14 @@ public class UpdateList extends AppCompatActivity {
 
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void createOnClick (View view){
         ToDoList newList = new ToDoList();
+        newList.listId = ToDoMain.selectedList.listId;
         newList.userId = Login.userid;
         newList.title = ((EditText) findViewById(R.id.listTitle)).getText().toString();
-        newList.group = ((Spinner) findViewById(R.id.groupSpinner)).getSelectedItem().toString();
+        newList.group = ((Spinner) findViewById(R.id.groupListSpinner)).getSelectedItem().toString();
         newList.fromUser = Login.username;
         newList.toUser = ((EditText) findViewById(R.id.shareText)).getText().toString();
         newList.completed = 0;
@@ -224,7 +235,7 @@ class UpdateToDoList extends AsyncTask<String, Void, Void> {
     Context context;
     Activity activity;
     View view;
-    PlannerEvent event;
+    ToDoList list;
     ApiResponse apiResponse = null;
     ProgressDialog progress;
 
@@ -232,7 +243,7 @@ class UpdateToDoList extends AsyncTask<String, Void, Void> {
         this.context = ctx;
         this.activity = act;
         this.view = vw;
-        this.event = event;
+        this.list = list;
     }
 
     @Override
@@ -245,7 +256,7 @@ class UpdateToDoList extends AsyncTask<String, Void, Void> {
 
     protected Void doInBackground(String... urls){
         Gson gson = new Gson();
-        String json = gson.toJson(event);
+        String json = gson.toJson(list);
 
         ApiManagement.PostNoReturn("todolist/lists/update", json);
         Menu.toDoListArray = (ToDoListArray) ApiManagement.PostWithReturn("todolist/lists", json, new ToDoListArray(), ToDoListArray.class);
