@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -60,6 +61,9 @@ public class CreatePlanner extends AppCompatActivity {
         actionBar.setTitle("Create Entry");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        Log.e("Default calendar date:", String.valueOf(defaultCalendar.get(Calendar.DAY_OF_MONTH)));
+        Log.e("Event calendar date:", String.valueOf(eventCalendar.get(Calendar.DAY_OF_MONTH)));
+
         // Get all of the buttons set for later use
         Switch locationSwitch = (Switch) findViewById(R.id.locationSwitch);
         LinearLayout locationLayout = (LinearLayout) findViewById(R.id.locationLayout);
@@ -81,7 +85,10 @@ public class CreatePlanner extends AppCompatActivity {
                 defaultCalendar.set(Calendar.YEAR, year);
                 defaultCalendar.set(Calendar.MONTH, month);
                 defaultCalendar.set(Calendar.DAY_OF_MONTH, day);
-                updateDateLabel(lastClick);
+                if (lastClick == eventDate)
+                    updateDateLabel(lastClick);
+                else
+                    updateDateReminderLabel(lastClick);
             }
         };
         eventDate.setOnClickListener(new View.OnClickListener(){
@@ -108,7 +115,10 @@ public class CreatePlanner extends AppCompatActivity {
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 defaultCalendar.set(Calendar.HOUR_OF_DAY, hour);
                 defaultCalendar.set(Calendar.MINUTE, minute);
-                updateTimeLabel(lastClick);
+                if (lastClick == eventTime)
+                    updateTimeLabel(lastClick);
+                else
+                    updateTimeReminderLabel(lastClick);
             }
         };
         eventTime.setOnClickListener(new View.OnClickListener(){
@@ -177,7 +187,15 @@ public class CreatePlanner extends AppCompatActivity {
         String myFormat="MM/dd/yy";
         SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
         text.setText(dateFormat.format(defaultCalendar.getTime()));
-        eventCalendar = defaultCalendar;
+        eventCalendar.set(defaultCalendar.get(Calendar.YEAR), defaultCalendar.get(Calendar.MONTH), defaultCalendar.get(Calendar.DAY_OF_MONTH));
+        defaultCalendar = Calendar.getInstance();
+    }
+
+    private void updateDateReminderLabel(EditText text){
+        String myFormat="MM/dd/yy";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
+        text.setText(dateFormat.format(defaultCalendar.getTime()));
+        reminderCalendar.set(defaultCalendar.get(Calendar.YEAR), defaultCalendar.get(Calendar.MONTH), defaultCalendar.get(Calendar.DAY_OF_MONTH));
         defaultCalendar = Calendar.getInstance();
     }
 
@@ -185,7 +203,15 @@ public class CreatePlanner extends AppCompatActivity {
         String myFormat="hh:mm a";
         SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
         text.setText(dateFormat.format(defaultCalendar.getTime()));
-        reminderCalendar = defaultCalendar;
+        eventCalendar.set(eventCalendar.get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH), eventCalendar.get(Calendar.DAY_OF_MONTH), defaultCalendar.get(Calendar.HOUR_OF_DAY), defaultCalendar.get(Calendar.MINUTE));
+        defaultCalendar = Calendar.getInstance();
+    }
+
+    private void updateTimeReminderLabel(EditText text){
+        String myFormat="hh:mm a";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
+        text.setText(dateFormat.format(defaultCalendar.getTime()));
+        reminderCalendar.set(reminderCalendar.get(Calendar.YEAR), reminderCalendar.get(Calendar.MONTH), reminderCalendar.get(Calendar.DAY_OF_MONTH), defaultCalendar.get(Calendar.HOUR_OF_DAY), defaultCalendar.get(Calendar.MINUTE));
         defaultCalendar = Calendar.getInstance();
     }
 
