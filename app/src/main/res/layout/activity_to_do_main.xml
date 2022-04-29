@@ -77,19 +77,11 @@
                 android:id="@+id/textView116"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="5"
                 android:text="Group"
                 android:textColor="@color/lightest_green"
                 android:textSize="18sp" />
 
-            <CheckBox
-                android:id="@+id/checkBox"
-                android:layout_width="5dp"
-                android:layout_height="28dp"
-                android:layout_weight="1"
-                android:checked="true"
-                android:clickable="false"
-                android:textSize="18sp" />
         </LinearLayout>
 
         <View
@@ -108,33 +100,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"/>
         </ScrollView>
-<!--        <ScrollView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="475dp">-->
-<!--            <LinearLayout-->
-<!--                android:id="@+id/listsLayout"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:orientation="horizontal">-->
-
-<!--                <Space-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_weight="1" />-->
-
-<!--                <ListView-->
-<!--                    android:id="@+id/listsView"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="475dp"-->
-<!--                    android:layout_weight="1" />-->
-
-<!--                <Space-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_weight="1" />-->
-<!--            </LinearLayout>-->
-<!--        </ScrollView>-->
-
     </LinearLayout>
 
 

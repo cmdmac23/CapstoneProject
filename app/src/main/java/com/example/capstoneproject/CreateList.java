@@ -119,22 +119,12 @@ public class CreateList extends AppCompatActivity {
             }
         });
 
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    items.get(i).difficulty = ((SeekBar) findViewById(R.id.difficultyListBar)).getProgress() + 1;
-                    adapter.notifyDataSetChanged();
-                    return(true);
-            }
-        });
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     public static void popupMessage(String message, Context context){

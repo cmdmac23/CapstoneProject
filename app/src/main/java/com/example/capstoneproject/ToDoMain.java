@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Space;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -135,23 +136,39 @@ public class ToDoMain extends AppCompatActivity {
                 }
             }
         });
-        row.setBackgroundColor(ContextCompat.getColor(ctx, R.color.lightest_green));
+        row.setBackgroundColor(Color.rgb(122, 159, 90));
 
         TextView titleText = new TextView(ctx);
         titleText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
         titleText.setWidth(665);
         titleText.setText(list.title);
-        titleText.setTextSize(18);
+        titleText.setTextColor(ContextCompat.getColor(ctx, R.color.white));
+        titleText.setTextSize(20);
         titleText.setPadding(15, 0, 0, 0);
 
         TextView groupText = new TextView(ctx);
         groupText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1));
         groupText.setText(list.group);
+        groupText.setTextColor(ContextCompat.getColor(ctx, R.color.white));
+        groupText.setTextSize(14);
+        groupText.setWidth(200);
+
 
         row.addView(titleText);
         row.addView(groupText);
 
+        Space listSpace = new Space(ctx);
+        listSpace.setLayoutParams(new LinearLayout.LayoutParams(1500, 2));
+        ((LinearLayout.LayoutParams)listSpace.getLayoutParams()).gravity = Gravity.CENTER_HORIZONTAL;
+
+        View listLine = new View(ctx);
+        listLine.setLayoutParams(new LinearLayout.LayoutParams(1200, 2));
+        listLine.setBackgroundColor(ContextCompat.getColor(ctx, R.color.darkest_green));
+        ((LinearLayout.LayoutParams)listLine.getLayoutParams()).gravity = Gravity.CENTER_HORIZONTAL;
+
+
         mainListLayout.addView(row);
+        mainListLayout.addView(listSpace);
         mainListLayout.addView(subLayout);
     }
 
@@ -160,7 +177,45 @@ public class ToDoMain extends AppCompatActivity {
         menu.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         menu.setOrientation(LinearLayout.VERTICAL);
         //menu.setId(2000000 + entry.eventId);
-        menu.setBackgroundColor(ContextCompat.getColor(ctx, R.color.submenu_green));
+        menu.setBackgroundColor(ContextCompat.getColor(ctx, R.color.white));
+
+        LinearLayout labelItems = new LinearLayout(ctx);
+        labelItems.getHeight();
+        labelItems.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        labelItems.setBackgroundColor(ContextCompat.getColor(ctx, R.color.submenu_green));
+        labelItems.setOrientation(LinearLayout.HORIZONTAL);
+
+        TextView itemView = new TextView(ctx);
+        itemView.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 7));
+        itemView.setPadding(5, 0, 0, 0);
+        itemView.setText("Items");
+        itemView.setTextSize(18);
+        itemView.setWidth(665);
+        itemView.setPadding(15, 0, 0, 0);
+        labelItems.addView(itemView);
+
+        TextView difView = new TextView(ctx);
+        difView.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 4));
+        difView.setText("Difficulty");
+        difView.setTextSize(18);
+        difView.setWidth(450);
+        labelItems.addView(difView);
+
+        CheckBox fakeCheck = new CheckBox(ctx);
+        fakeCheck.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+        fakeCheck.setText("");
+        fakeCheck.setChecked(true);
+        fakeCheck.setTextColor(ContextCompat.getColor(ctx, R.color.black));
+        fakeCheck.setWidth(70);
+        labelItems.addView(fakeCheck);
+
+        View dividerLine = new View(ctx);
+        dividerLine.setLayoutParams(new LinearLayout.LayoutParams(1200, 2));
+        dividerLine.setBackgroundColor(ContextCompat.getColor(ctx, R.color.light_gold));
+        ((LinearLayout.LayoutParams)dividerLine.getLayoutParams()).gravity = Gravity.CENTER_HORIZONTAL;
+
+        menu.addView(labelItems);
+        menu.addView(dividerLine);
 
         int length = list.listItemArray.length;
         for (int i = 0; i < length; i++) {
@@ -170,17 +225,19 @@ public class ToDoMain extends AppCompatActivity {
             groupItems.setOrientation(LinearLayout.HORIZONTAL);
 
             TextView listItemText = new TextView(ctx);
-            listItemText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+            listItemText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 7));
             listItemText.setText(list.listItemArray[i].itemName);
             listItemText.setTextSize(18);
             listItemText.setWidth(665);
+            listItemText.setPadding(15, 0, 0, 0);
             //menu.addView(listItemText);
             groupItems.addView(listItemText);
 
             TextView difficultyText = new TextView(ctx);
             difficultyText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1));
-            difficultyText.setText("Difficulty: " + list.listItemArray[i].difficulty);
+            difficultyText.setText("" + list.listItemArray[i].difficulty);
             difficultyText.setWidth(320);
+            listItemText.setPadding(15, 0, 0, 0);
             //menu.addView(difficultyText);
             groupItems.addView(difficultyText);
 
