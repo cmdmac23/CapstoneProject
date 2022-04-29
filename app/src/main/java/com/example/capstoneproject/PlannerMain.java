@@ -2,6 +2,7 @@ package com.example.capstoneproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -200,12 +201,18 @@ public class PlannerMain extends AppCompatActivity {
             }
         });
 
+        View line = new View(ctx);
+        line.setLayoutParams(new LinearLayout.LayoutParams(1200, 2));
+        line.setBackgroundColor(Color.rgb(85, 133, 43));
+        ((LinearLayout.LayoutParams)line.getLayoutParams()).gravity = Gravity.CENTER_HORIZONTAL;
+
         row.addView(titleText);
         row.addView(dateText);
         row.addView(checkbox);
 
         mainLayout.addView(row);
         mainLayout.addView(subLayout);
+        mainLayout.addView(line);
     }
 
     public static LinearLayout getEntrySubLayout(Context ctx, PlannerEvent entry){
