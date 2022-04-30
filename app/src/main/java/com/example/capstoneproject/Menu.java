@@ -253,6 +253,7 @@ class PreloadPlannerEntries extends AsyncTask<String, Void, Void> {
     }
 }
 
+//uses endpoint "todolists/lists" to populate existing user lists when to-do list page is opened
 class PreloadToDoLists extends AsyncTask<String, Void, Void> {
     Context context;
     Activity activity;
@@ -346,6 +347,7 @@ class UpdateCompletionStatus extends AsyncTask<String, Void, Void> {
     }
 }
 
+//indicates user has completed an item on their to-do list to database (sends item.completed = 1 to database)
 class UpdateListCompletionStatus extends AsyncTask<String, Void, Void> {
     ToDoListItem updateItem;
 

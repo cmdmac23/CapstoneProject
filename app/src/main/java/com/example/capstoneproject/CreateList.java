@@ -44,6 +44,7 @@ public class CreateList extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     public Context context = this;
+    //temporary list of to-do list items
     public ArrayList<ToDoListItem> items = new ArrayList<ToDoListItem>();
 
     @Override
@@ -55,30 +56,34 @@ public class CreateList extends AppCompatActivity {
         actionBar.setTitle("Create List");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        //create and initialize list view variable and adapter
         ListView listView = findViewById(R.id.listView);
         TextAdapter adapter = new TextAdapter();
 
+        //sends items list to adapter
         adapter.setData(items);
         listView.setAdapter(adapter);
 
+        //prompts user to add a new item to their list
         final Button newTaskButton = findViewById(R.id.newTaskButton);
-
         newTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //creates a pop-up dialog that asks the user to input an item
                 EditText taskInput = new EditText(CreateList.this);
                 taskInput.setSingleLine();
                 AlertDialog dialog = new AlertDialog.Builder(CreateList.this)
-                        .setTitle("Add a New Task")
-                        .setMessage("What is your new task?")
+                        .setTitle("Add a New Item")
                         .setView(taskInput)
-                        .setNeutralButton("Add task", new DialogInterface.OnClickListener() {
+                        .setNeutralButton("Add Item", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                //creates new to-do list item
                                 ToDoListItem item = new ToDoListItem();
                                 item.itemName = taskInput.getText().toString();
                                 item.completed = 0;
                                 dialogInterface.dismiss();
+                                //creates a second pop-up that prompts user to select a difficulty for their list item
                                 SeekBar seekBar = new SeekBar(CreateList.this);
                                 seekBar.setMax(4);
                                 seekBar.setProgress(2);
@@ -106,21 +111,23 @@ public class CreateList extends AppCompatActivity {
 
         context = this;
 
+        //creates share switch on interface (prompts user to enter a username to share to-do list if switched)
         Switch shareSwitch = (Switch) findViewById(R.id.shareListSwitch);
-        LinearLayout shareLayout = (LinearLayout) findViewById(R.id.shareLayout);
+        LinearLayout shareListLayout = (LinearLayout) findViewById(R.id.shareListLayout);
         shareSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    shareLayout.setVisibility(View.VISIBLE);
+                    shareListLayout.setVisibility(View.VISIBLE);
                 } else {
-                    shareLayout.setVisibility(View.GONE);
+                    shareListLayout.setVisibility(View.GONE);
                 }
             }
         });
 
     }
 
+    //user can exit create list page by hitting "back" arrow
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -141,31 +148,36 @@ public class CreateList extends AppCompatActivity {
         alertDialog.show();
     }
 
+    //list adapter so list items can be viewed on create list page
     class TextAdapter extends BaseAdapter {
         public ArrayList<ToDoListItem> list = new ArrayList<ToDoListItem>();
-        //SeekBar seekbar = new SeekBar(CreateList.this);
 
+        //called in first lines, but clears lists then adds items in "items" list to adapter
         void setData(ArrayList<ToDoListItem> newList) {
             list.clear();
             list.addAll(newList);
             notifyDataSetChanged();
         }
 
+        //total size of items list
         @Override
         public int getCount() {
             return list.size();
         }
 
+        //gets item in list
         @Override
         public Object getItem(int position) {
             return null;
         }
 
+        //gets item ID in list
         @Override
         public long getItemId(int position) {
             return 0;
         }
 
+        //displays list items
         @Override
         public View getView(int position, View view, ViewGroup viewGroup) {
             LayoutInflater inflater = (LayoutInflater) CreateList.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -177,6 +189,7 @@ public class CreateList extends AppCompatActivity {
 
     }
 
+    //API function call, pulls values input by user to send to database
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void createOnClick(View view) {
         ToDoList newList = new ToDoList();
@@ -184,7 +197,7 @@ public class CreateList extends AppCompatActivity {
         newList.title = ((EditText) findViewById(R.id.listTitle)).getText().toString();
         newList.group = ((Spinner) findViewById(R.id.groupListSpinner)).getSelectedItem().toString();
         newList.fromUser = Login.username;
-        newList.toUser = ((EditText) findViewById(R.id.shareText)).getText().toString();
+        newList.toUser = ((EditText) findViewById(R.id.shareListText)).getText().toString();
         newList.completed = 0;
         newList.listItemArray = items.toArray(new ToDoListItem[items.size()]);
         if (newList.title.isEmpty()) {
@@ -196,6 +209,7 @@ public class CreateList extends AppCompatActivity {
     }
 }
 
+//sends list input from user to the endpoint "todolists/lists/add" so list is added to database
 class CreateToDoList extends AsyncTask<String, Void, Void> {
     Context context;
     Activity activity;
