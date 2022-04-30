@@ -13,7 +13,7 @@ application. Users can also share planner entries and to-do lists with other
 users for collaborative access to schedules and lists. 
 
 ## Important Notes
-1. As this repository is public, the code seen here is a fresh version of our code with sensitive information removed (API password). If you download and run this code in the current state it will not work. The password for the API must be put in the ApiManagement class on line 15.
+1. As this repository is public, the code seen here has sensitive information removed (the current API password). If you download and run this code in the current state it will not work. The updated password for the API must be put in the ApiManagement class on line 15.
 2. The application will only have access to the necessary database and API until Sunday, May 22, 2022. After this date, our hosting service will expire and the application will no longer function.
 
 ## Requirements
