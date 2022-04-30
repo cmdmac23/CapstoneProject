@@ -62,7 +62,7 @@ public class UpdatePlanner extends AppCompatActivity {
         setContentView(R.layout.activity_create_planner);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Create Entry");
+        actionBar.setTitle("Update Entry");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         Switch locationSwitch = (Switch) findViewById(R.id.locationSwitch);
@@ -184,7 +184,6 @@ public class UpdatePlanner extends AppCompatActivity {
         ((EditText) findViewById(R.id.eventTitle)).setText(event.title);
         ((EditText) findViewById(R.id.eventDescription)).setText(event.description);
 
-
         Spinner spinner = ((Spinner) findViewById(R.id.groupSpinner));
         if (event.group == "Personal")
             spinner.setSelection(1);
@@ -211,16 +210,13 @@ public class UpdatePlanner extends AppCompatActivity {
         }
 
         ((EditText) findViewById(R.id.locationText)).setText(event.location);
+        if (!event.location.isEmpty())
+            ((Switch)findViewById(R.id.locationSwitch)).setChecked(true);
 
         ((SeekBar) findViewById(R.id.difficultyBar)).setProgress(event.difficulty - 1);
         ((EditText) findViewById(R.id.shareText)).setText(event.toUser);
-    }
-
-    private void setDefaultValues(){
-        updateDateLabel(eventDate);
-        updateDateLabel(reminderDate);
-        updateTimeLabel(eventTime);
-        updateTimeLabel(reminderTime);
+        if(!event.toUser.isEmpty())
+            ((Switch)findViewById(R.id.shareSwitch)).setChecked(true);
     }
 
     private void updateDateLabel(EditText text){
