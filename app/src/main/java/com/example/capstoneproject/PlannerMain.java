@@ -279,7 +279,7 @@ public class PlannerMain extends AppCompatActivity {
         if(!entry.fromUser.isEmpty() && entry.toUser.equals(Login.username)){
             TextView sharedText = new TextView(ctx);
             sharedText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
-            sharedText.setText("Shared From: " + entry.toUser);
+            sharedText.setText("Shared From: " + entry.fromUser);
             sharedText.setPadding(50,0,0,0);
 
             menu.addView(sharedText);

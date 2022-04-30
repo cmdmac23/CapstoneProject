@@ -299,7 +299,7 @@ public class ToDoMain extends AppCompatActivity {
         if (!list.fromUser.isEmpty() && list.toUser.equals(Login.username)) {
             TextView sharedText = new TextView(ctx);
             sharedText.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
-            sharedText.setText("Shared From: " + list.toUser);
+            sharedText.setText("Shared From: " + list.fromUser);
             sharedText.setPadding(50, 0, 0, 0);
 
             menu.addView(sharedText);
