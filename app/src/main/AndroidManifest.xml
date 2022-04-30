@@ -7,9 +7,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label=""
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/app_logo"
+        android:label="inFocus"
+        android:roundIcon="@mipmap/app_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.CapstoneProject"
         android:usesCleartextTraffic="true">
@@ -21,7 +21,6 @@
         <activity android:name=".Settings" />
         <activity android:name=".RewardsMain" />
         <activity android:name=".ToDoMain" />
-        <activity android:name=".CreateList" />
         <activity android:name=".UpdateList" />
         <activity android:name=".PlannerMain" />
         <activity android:name=".ForgotPassword" />
