@@ -90,6 +90,7 @@ public class UpdatePlanner extends AppCompatActivity {
                 updateDateLabel(lastClick);
             }
         };
+
         eventDate.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -97,6 +98,7 @@ public class UpdatePlanner extends AppCompatActivity {
                 new DatePickerDialog(UpdatePlanner.this, date, defaultCalendar.get(Calendar.YEAR), defaultCalendar.get(Calendar.MONTH), defaultCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+
         reminderDate.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){

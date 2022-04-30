@@ -27,7 +27,7 @@ public class UnlockReward extends AppCompatActivity {
     public static int pointCost;
     public static Context context;
 
-    @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_unlock_reward);
@@ -46,6 +46,7 @@ public class UnlockReward extends AppCompatActivity {
 
         pointTotal.setText("You Have " + Login.points + " Points");
 
+        // Listener for the drop down menu, switch plant image on new selection
         plantSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -77,6 +78,7 @@ public class UnlockReward extends AppCompatActivity {
                         break;
                 }
 
+                // if user doesnt have enough points, set button to gray
                 unlockButton.setText("Unlock for " + pointCost + " Points");
                 if (!userHasEnoughPoints(pointCost)){
                     unlockButton.setBackgroundColor(Color.rgb(169, 169, 169));
@@ -92,6 +94,7 @@ public class UnlockReward extends AppCompatActivity {
         });
     }
 
+    // Back button goes to parent activity (reward main)
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

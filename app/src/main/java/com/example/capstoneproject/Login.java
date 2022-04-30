@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 
 public class Login extends AppCompatActivity {
     public static UserLogin user = new UserLogin();
+    // store these values for later API requests that require this information
     public static String username;
     public static int userid;
     public static int points;
@@ -32,17 +33,14 @@ public class Login extends AppCompatActivity {
         createNotificationChannel();
     }
 
+    // Notification channel taken from https://developer.android.com/training/notify-user/build-notification
     private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.channel_name);
             String description = getString(R.string.channel_description);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel("channelid", name, importance);
             channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }

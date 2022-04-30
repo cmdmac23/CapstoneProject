@@ -74,6 +74,7 @@ public class Settings extends AppCompatActivity {
         });
     }
 
+    // side menu controller
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
@@ -87,6 +88,7 @@ public class Settings extends AppCompatActivity {
         context.startActivity(intent);
     }
 
+    // Not currently supported
     public void UsernameOnClick(View view){
         selectedOption = "username";
         Intent intent = new Intent(context, UpdateInformation.class);

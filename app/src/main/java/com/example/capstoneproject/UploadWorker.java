@@ -12,6 +12,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+// Made using https://developer.android.com/topic/libraries/architecture/workmanager/basics
 public class UploadWorker extends Worker {
     public UploadWorker(
             @NonNull Context context,

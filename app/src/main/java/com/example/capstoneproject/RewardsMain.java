@@ -85,6 +85,7 @@ public class RewardsMain extends AppCompatActivity {
         });
     }
 
+    // Side menu controller
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
@@ -97,6 +98,7 @@ public class RewardsMain extends AppCompatActivity {
         startActivity(i);
     }
 
+    // Fill in unlocked plants
     public void populateScreen(View view){
         int length = Menu.rewardArray.rewardArray.length;
 
@@ -107,6 +109,7 @@ public class RewardsMain extends AppCompatActivity {
         }
     }
 
+    // Get each row for unlocked plants
     public static LinearLayout getRewardLayout(Context ctx, RewardItem rewardInfo){
         LinearLayout row = new LinearLayout(ctx);
         row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -117,6 +120,7 @@ public class RewardsMain extends AppCompatActivity {
         plantImage.setLayoutParams(params);
         plantImage.setPadding(10,10,10,10);
 
+        // get correct plant image
         switch (rewardInfo.plantId){
             case 0:
                 plantImage.setImageResource(R.mipmap.sprout_plant_foreground);
@@ -150,6 +154,7 @@ public class RewardsMain extends AppCompatActivity {
         return row;
     }
 
+    // add horizontal line between each plant row
     public View getHorizontalLine(Context ctx){
         View line = new View(ctx);
         line.setLayoutParams(new LinearLayout.LayoutParams(1000, 3));

@@ -38,6 +38,7 @@ public class UpdateInformation extends AppCompatActivity {
         box3 = (EditText) findViewById(R.id.updateInfoThirdBox);
         submit = (Button) findViewById(R.id.updateInfoButton);
 
+        // For code reuse, have different paths depending on what button user selected
         if (Settings.selectedOption.equals("email"))
             emailUpdate();
         else if (Settings.selectedOption.equals("username"))
@@ -46,6 +47,7 @@ public class UpdateInformation extends AppCompatActivity {
             passwordUpdate();
     }
 
+    // Set text depending on selection
     private void emailUpdate(){
         title.setText("Update Your Email");
         box1.setHint("New Email");
@@ -121,6 +123,7 @@ public class UpdateInformation extends AppCompatActivity {
         alertDialog.show();
     }
 
+    // Back button
     public boolean onOptionsItemSelected(MenuItem item){
         Intent i = new Intent(this, Login.class);
         startActivity(i);

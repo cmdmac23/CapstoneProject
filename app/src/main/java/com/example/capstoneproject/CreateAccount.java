@@ -89,6 +89,7 @@ public class CreateAccount extends AppCompatActivity {
         alertDialog.show();
     }
 
+    // Clicking back button will go back to login page
     public boolean onOptionsItemSelected(MenuItem item){
         Intent i = new Intent(this, Login.class);
         startActivity(i);

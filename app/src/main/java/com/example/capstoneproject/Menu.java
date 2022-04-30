@@ -36,6 +36,7 @@ public class Menu extends AppCompatActivity {
     public ActionBarDrawerToggle actionBarDrawerToggle;
     public static Context context;
     public static LinearLayout linearLayout;
+    // Arrays that store all of the user's created items
     public static PlannerEventArray plannerEntryArray;
     public static ToDoListArray toDoListArray;
     public static RewardArray rewardArray;
@@ -53,6 +54,7 @@ public class Menu extends AppCompatActivity {
 
         context = this;
         linearLayout = (LinearLayout) findViewById(R.id.menuMainLinearLayout);
+        // Preload all of the information about the user on login so that there is not separate loading screens later
         new PreloadPlannerEntries(this, this).execute();
         new PreloadToDoLists(this, this).execute();
         new PreloadRewards(this, this).execute();
@@ -61,6 +63,7 @@ public class Menu extends AppCompatActivity {
         pointsText.setText("Total Points: " + Login.points);
 
         // Popup side menu
+        // Made referencing https://material.io/components/navigation-drawer/android#modal-navigation-drawer
         drawerLayout = findViewById(R.id.my_drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
@@ -99,6 +102,7 @@ public class Menu extends AppCompatActivity {
         });
     }
 
+    // Controller for popup menu
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
@@ -106,6 +110,7 @@ public class Menu extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // Fill in todays tasks, if any
     public static void populateScreen(View view, Context ctx){
         SimpleDateFormat readingFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date entryDate = new Date();
@@ -125,6 +130,7 @@ public class Menu extends AppCompatActivity {
         }
     }
 
+    // Create layout for each event row
     public static LinearLayout getEntryLayout(Context ctx, String title, String date, int completed, int eventid, int index){
         Date newDate = null;
         SimpleDateFormat readingFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -177,6 +183,7 @@ public class Menu extends AppCompatActivity {
         return row;
     }
 
+    // Marking event as complete with checkbox
     public static void onCheckboxChecked(int index, boolean isChecked, CheckBox checkBox){
         PlannerEvent updateStatus = new PlannerEvent();
         updateStatus.eventId = Menu.plannerEntryArray.entryArray[index].eventId;

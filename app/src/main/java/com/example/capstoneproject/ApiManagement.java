@@ -45,6 +45,7 @@ public class ApiManagement {
     public static String baseUrl = "http://cmac23-001-site1.etempurl.com/api/database/";
     //public static String baseUrl = "http://162.242.2.65:55357/api/database/";
 
+    // Get our JWT Auth token from the API to make the rest of the API calls
     public static String GetToken(){
         if (token == null){
             try {
@@ -71,6 +72,7 @@ public class ApiManagement {
         return token;
     }
 
+    // POST request to API that returns some response
     public static Object PostWithReturn(String endpoint, String json, Object object, Class cls){
         try {
             URL url = new URL(ApiManagement.baseUrl + endpoint);
@@ -100,7 +102,7 @@ public class ApiManagement {
         return null;
     }
 
-
+    // POST request to API that does not return a response
     public static void PostNoReturn(String endpoint, String json){
         try {
             URL url = new URL(ApiManagement.baseUrl + endpoint);

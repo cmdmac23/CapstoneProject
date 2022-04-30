@@ -113,6 +113,7 @@ public class PlannerMain extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // Controller for side menu
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
@@ -120,9 +121,9 @@ public class PlannerMain extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // Fill in screen for current date
     public void populateScreen(View view, Date selectedDate){
         int length = Menu.plannerEntryArray.entryArray.length;
-        System.out.println(length);
         SimpleDateFormat readingFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date entryDate = new Date();
 
@@ -141,6 +142,7 @@ public class PlannerMain extends AppCompatActivity {
         }
     }
 
+    // Get "title" row for each entry
     public static void getEntryMainLayout(Context ctx, View view, PlannerEvent entry, int index){
         Date newDate = null;
         SimpleDateFormat readingFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -215,6 +217,7 @@ public class PlannerMain extends AppCompatActivity {
         mainLayout.addView(line);
     }
 
+    // Get the sub menu that expands out when the title row is clicked
     public static LinearLayout getEntrySubLayout(Context ctx, PlannerEvent entry){
         LinearLayout menu = new LinearLayout(ctx);
         menu.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));

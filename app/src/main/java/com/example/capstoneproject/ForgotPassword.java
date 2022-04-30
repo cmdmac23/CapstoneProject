@@ -42,6 +42,7 @@ public class ForgotPassword extends AppCompatActivity {
         }
     }
 
+    // Clicking back button will go back to login screen
     public boolean onOptionsItemSelected(MenuItem item){
         Intent i = new Intent(this, Login.class);
         startActivity(i);
