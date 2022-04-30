@@ -78,11 +78,13 @@ public class UpdateInformation extends AppCompatActivity {
             newUser.newEmail = box1.getText().toString();
             newUser.password = box2.getText().toString();
             newUser.userId = Login.userid;
+            new UpdateUserProfile(this, this, newUser, Settings.selectedOption).execute();
         }
         else if (Settings.selectedOption.equals("username")){
             newUser.newUsername = box1.getText().toString();
             newUser.password = box2.getText().toString();
             newUser.userId = Login.userid;
+            new UpdateUserProfile(this, this, newUser, Settings.selectedOption).execute();
         }
         else{
             if(!box2.getText().toString().equals(box3.getText().toString())){
